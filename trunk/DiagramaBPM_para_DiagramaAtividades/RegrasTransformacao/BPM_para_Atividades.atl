@@ -4,3 +4,35 @@
 
 module BPMparaAtividades;
 create DiagramaAtividade: MetaModeloUML from DiagramaBPM: MetaModeloBPM;
+
+rule ModeloBPM_para_ModeloAtividade {
+	from
+		ModeloBPM: MetaModeloBPM!BpmnDiagram
+	to
+		ModeloAtividade: MetaModeloUML!Model (
+			name <- ModeloBPM.name,
+			visibility <- #public
+		)
+}
+
+rule ModeloBPM_para_DiagramaAtividade {
+	from
+		ModeloBPM: MetaModeloBPM!BpmnDiagram	
+	to
+		ModeloAtividade: MetaModeloUML!Activity (			
+			name <- ModeloBPM.name,
+			visibility <- #public
+		)
+}
+
+rule NomeBPM_para_NomeAtividade {
+	from
+		Tarefa: MetaModeloBPM!Activity		
+		(Tarefa.activityType = #Task )
+	to
+		Atividade: MetaModeloUML!ActivityNode (
+			name <- Tarefa.name,
+			activity <- Atividade.name,
+			visibility <- #public			
+		)
+}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_eFvK0bHJEeGpVrvESmhnQQ" iD="_eFvK0LHJEeGpVrvESmhnQQ">
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_eFvK0bHJEeGpVrvESmhnQQ" iD="_eFvK0LHJEeGpVrvESmhnQQ" name="DiagramaBPM">
   <pools xmi:type="bpmn:Pool" xmi:id="_eF90UbHJEeGpVrvESmhnQQ" iD="_eF90ULHJEeGpVrvESmhnQQ" name="Origem">
     <vertices xmi:type="bpmn:Activity" xmi:id="_eGG-QLHJEeGpVrvESmhnQQ" iD="_eGGXMLHJEeGpVrvESmhnQQ" name="Chamada Telefonica" activityType="Task">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_mk2FIbHJEeGpVrvESmhnQQ"/>
