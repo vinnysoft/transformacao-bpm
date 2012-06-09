@@ -1,17 +1,14 @@
--- @nsURI MetaModeloUML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @nsURI UML=http://www.eclipse.org/uml2/3.0.0/UML
 -- @nsURI MetaModeloBPM=http://stp.eclipse.org/bpmn
-
 
 module BPMparaAtividades;
 create DiagramaAtividade: MetaModeloUML from DiagramaBPM: MetaModeloBPM;
 
-rule NomeBPM_para_NomeAtividade {
+rule Teste {
 	from
-		Tarefa: MetaModeloBPM!Activity		
-		(Tarefa.activityType = #Task )
-	to
-		Atividade: MetaModeloUML!ActivityNode (
-			name <- Tarefa.name,
-			visibility <- #public			
+		source : MetaModeloBPM!Pool
+	to 
+		target : MetaModeloUML!Model(
+			name <- source.name			
 		)
 }
