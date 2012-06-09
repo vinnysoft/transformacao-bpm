@@ -4,11 +4,15 @@
 module BPMparaAtividades;
 create DiagramaAtividade: MetaModeloUML from DiagramaBPM: MetaModeloBPM;
 
-rule Teste {
+rule DiagramaBPM2ModeloUML {
 	from
-		source : MetaModeloBPM!Pool
+		BPM : MetaModeloBPM!BpmnDiagram
 	to 
-		target : MetaModeloUML!Model(
-			name <- source.name			
+		ModeloUML: MetaModeloUML!Model(
+			name <- 'Modelo UML (gerado)'	
+		),
+		DiagramaAtividades: MetaModeloUML!Activity(
+			name <- 'Diagrama de Atividades (gerado)',
+			package <- ModeloUML
 		)
 }
