@@ -2,23 +2,13 @@
 -- @nsURI UML=http://www.eclipse.org/uml2/2.1.0/UML
 module Classe_para_Classe;
 
-create target : MetaModeloUML from source : MetaModeloUML;
+create target : MetaModeloUML refining source : MetaModeloUML;
 
 helper context String def : toU1Case : String = 
 	if self.size() > 0 
 		then self.substring(1,1).toUpper() + self.substring(2,self.size()) 
  		else self 
 	endif;
-
-rule Classe {
-	from
-		source : MetaModeloUML!Class
-	to 
-		target : MetaModeloUML!Class (
-			visibility <- source.visibility,
-			name <- source.name
-		)
-}
 
 rule Property {
 	from
