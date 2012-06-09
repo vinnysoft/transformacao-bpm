@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML">
+  <uml:Class xmi:id="_jInycLJkEeGvn57fhNMmiQ" name="ClasseTeste">
+    <ownedOperation xmi:id="_jInycbJkEeGvn57fhNMmiQ" name="getAtributoTeste"/>
+    <ownedOperation xmi:id="_jInycrJkEeGvn57fhNMmiQ" name="setAtributoTeste">
+      <ownedParameter xmi:id="_jInyc7JkEeGvn57fhNMmiQ" name="AtributoTeste"/>
+    </ownedOperation>
+  </uml:Class>
+  <uml:Property xmi:id="_jInydLJkEeGvn57fhNMmiQ" visibility="private"/>
+</xmi:XMI>
