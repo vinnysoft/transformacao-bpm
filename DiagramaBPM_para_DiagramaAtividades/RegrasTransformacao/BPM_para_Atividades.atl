@@ -1,0 +1,6 @@
+-- @nsURI MetaModeloUML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @nsURI MetaModeloBPM=http://stp.eclipse.org/bpmn
+
+
+module BPMparaAtividades;
+create DiagramaAtividade: MetaModeloUML from DiagramaBPM: MetaModeloBPM;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_eFvK0bHJEeGpVrvESmhnQQ" iD="_eFvK0LHJEeGpVrvESmhnQQ">
+  <pools xmi:type="bpmn:Pool" xmi:id="_eF90UbHJEeGpVrvESmhnQQ" iD="_eF90ULHJEeGpVrvESmhnQQ" name="Origem">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_eGG-QLHJEeGpVrvESmhnQQ" iD="_eGGXMLHJEeGpVrvESmhnQQ" name="Chamada Telefonica" activityType="Task">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_mk2FIbHJEeGpVrvESmhnQQ"/>
+    </vertices>
+  </pools>
+  <pools xmi:type="bpmn:Pool" xmi:id="_hm2hIbHJEeGpVrvESmhnQQ" iD="_hm2hILHJEeGpVrvESmhnQQ" name="Central de Servicos">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_jexsEbHJEeGpVrvESmhnQQ" iD="_jexsELHJEeGpVrvESmhnQQ" name="Identificacao do Incidente">
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_mk2FIbHJEeGpVrvESmhnQQ"/>
+    </vertices>
+  </pools>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mk2FIbHJEeGpVrvESmhnQQ" iD="_mk2FILHJEeGpVrvESmhnQQ" source="_eGG-QLHJEeGpVrvESmhnQQ" target="_jexsEbHJEeGpVrvESmhnQQ"/>
+</bpmn:BpmnDiagram>
