@@ -16,3 +16,13 @@ rule DiagramaBPM2ModeloUML {
 			package <- ModeloUML
 		)
 }
+
+rule AtividadeBPM2AtividadeUML {
+	from
+		BPM : MetaModeloBPM!Activity
+	to 
+		Atividade : MetaModeloUML!Activity(
+			name <- BPM.name
+			--package <- thisModule.refGetValue('Diagrama de Atividades (gerado)')
+		)
+}
