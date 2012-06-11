@@ -108,9 +108,20 @@
 		<constant value="ControlFlow"/>
 		<constant value="32:3-34:4"/>
 		<constant value="__applySequenceEdgeBPM2ControlFlowUML"/>
+		<constant value="source"/>
+		<constant value="-&gt;"/>
+		<constant value="J.+(J):J"/>
+		<constant value="target"/>
 		<constant value="33:12-33:27"/>
-		<constant value="33:12-33:32"/>
-		<constant value="33:4-33:32"/>
+		<constant value="33:12-33:34"/>
+		<constant value="33:12-33:39"/>
+		<constant value="33:42-33:46"/>
+		<constant value="33:12-33:46"/>
+		<constant value="33:49-33:64"/>
+		<constant value="33:49-33:71"/>
+		<constant value="33:49-33:76"/>
+		<constant value="33:12-33:76"/>
+		<constant value="33:4-33:76"/>
 	</cp>
 	<field name="1" type="2"/>
 	<field name="3" type="4"/>
@@ -527,22 +538,36 @@
 			<dup/>
 			<getasm/>
 			<load arg="29"/>
+			<get arg="107"/>
 			<get arg="38"/>
+			<push arg="108"/>
+			<call arg="109"/>
+			<load arg="29"/>
+			<get arg="110"/>
+			<get arg="38"/>
+			<call arg="109"/>
 			<call arg="30"/>
 			<set arg="38"/>
 			<pop/>
 		</code>
 		<linenumbertable>
-			<lne id="107" begin="11" end="11"/>
-			<lne id="108" begin="11" end="12"/>
-			<lne id="109" begin="9" end="14"/>
-			<lne id="105" begin="8" end="15"/>
+			<lne id="111" begin="11" end="11"/>
+			<lne id="112" begin="11" end="12"/>
+			<lne id="113" begin="11" end="13"/>
+			<lne id="114" begin="14" end="14"/>
+			<lne id="115" begin="11" end="15"/>
+			<lne id="116" begin="16" end="16"/>
+			<lne id="117" begin="16" end="17"/>
+			<lne id="118" begin="16" end="18"/>
+			<lne id="119" begin="11" end="19"/>
+			<lne id="120" begin="9" end="21"/>
+			<lne id="105" begin="8" end="22"/>
 		</linenumbertable>
 		<localvariabletable>
-			<lve slot="3" name="103" begin="7" end="15"/>
-			<lve slot="2" name="102" begin="3" end="15"/>
-			<lve slot="0" name="17" begin="0" end="15"/>
-			<lve slot="1" name="74" begin="0" end="15"/>
+			<lve slot="3" name="103" begin="7" end="22"/>
+			<lve slot="2" name="102" begin="3" end="22"/>
+			<lve slot="0" name="17" begin="0" end="22"/>
+			<lve slot="1" name="74" begin="0" end="22"/>
 		</localvariabletable>
 	</operation>
 </asm>
