@@ -1,0 +1,46 @@
+-- @nsURI MetaModeloUML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @nsURI MetaModeloBPMN=http://stp.eclipse.org/bpmn
+
+
+module BPMNparaAtividades;
+create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
+
+rule DiagramaBPM2ModeloUML {
+	from
+		BPM: MetaModeloBPMN!BpmnDiagram
+	to
+		ModeloUML: MetaModeloUML!Model (
+			name <- 'Modelo UML (gerado)'
+		)
+}
+
+rule AtividadesBPM2AtividadesUML {
+	from
+		AtividadesBPM: MetaModeloBPMN!Activity
+	to
+		AtividadesUML: MetaModeloUML!Activity (
+			name <- AtividadesBPM.name,
+			package <- MetaModeloUML!Model -> allInstances() -> select(model | model.name
+					= 'Modelo UML (gerado)')
+		),
+		StructuredActivity: MetaModeloUML!StructuredActivityNode (
+			activity <- AtividadesUML,
+			name <- AtividadesUML.name
+		)
+		
+}
+
+rule SequenceEdgeBPM2ControlFlowUML {
+	from
+		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge
+	to
+		ActivityEdgeUML: MetaModeloUML!ControlFlow (
+			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name,
+			source <-  MetaModeloUML!ActivityNode -> allInstances() ->	select
+					(activityNode | activityNode.activity.name =	SequenceEdgeBPM.source.
+					name),
+			target <- MetaModeloUML!ActivityNode -> allInstances() -> select
+					(activityNode | activityNode.activity.name = SequenceEdgeBPM.target.
+					name)
+		)
+}
