@@ -30,7 +30,7 @@ rule SequenceEdgeBPM2ControlFlowUML {
 		SequenceEdgeBPM: MetaModeloBPM!SequenceEdge
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- SequenceEdgeBPM.name
+			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name
 		)
 }
 
