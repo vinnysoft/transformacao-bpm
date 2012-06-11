@@ -25,3 +25,12 @@ rule AtividadesBPM2AtividadesUML {
 		)
 }
 
+rule SequenceEdgeBPM2ControlFlowUML {
+	from
+		SequenceEdgeBPM: MetaModeloBPM!SequenceEdge
+	to
+		ActivityEdgeUML: MetaModeloUML!ControlFlow (
+			name <- SequenceEdgeBPM.name
+		)
+}
+
