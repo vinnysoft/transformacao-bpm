@@ -40,7 +40,8 @@ rule AtividadesBPM2AtividadesUML {
 		AtividadesUML: MetaModeloUML!Activity (
 			name <- AtividadesBPMN.name,
 			package <- MetaModeloUML!Model -> allInstances() -> select(model | model.name
-					= 'Modelo UML (gerado)')
+					= 'Modelo UML (gerado)'),
+			partition <- AtividadesBPMN.lanes.first()
 		)
 }
 
@@ -79,10 +80,9 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 		AtividadeEstruturadaUML: MetaModeloUML!StructuredActivityNode (
 			name <- TaskBPMN.name,
 			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
-					TaskBPMN.name)		
+					TaskBPMN.name)
 		)
 }
-
 
 rule SequenceEdgeBPM2ControlFlowUML {
 	from
@@ -104,26 +104,25 @@ rule PoolBPM2PartitionUML {
 		PoolBPM: MetaModeloBPMN!Pool
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			name <- PoolBPM.name	
+			name <- PoolBPM.name
 		)
 }
-
 
 rule LaneBPM2PartitionUML {
 	from
 		LaneBPM: MetaModeloBPMN!Lane
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			name <- LaneBPM.name	
+			name <- LaneBPM.name
 		)
 }
 
-
 rule MessagingEdgeBPM2SendControlFlowUML {
-	from 
+	from
 		MessagingEdgeBPM: MetaModeloBPMN!MessagingEdge
 	to
 		SendSignalUML: MetaModeloUML!SendSignalEvent (
 			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
-		) 		
+		)
+	
 }
