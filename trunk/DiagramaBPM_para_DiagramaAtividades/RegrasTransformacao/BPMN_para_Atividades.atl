@@ -32,32 +32,57 @@ rule DiagramaBPM2ModeloUML {
 
 rule AtividadesBPM2AtividadesUML {
 	from
-	AtividadeInicialBPMN: MetaModeloBPMN!Activity,	
-	AtividadeFinalBPMN: MetaModeloBPMN!Activity,
-	AtividadesBPM: MetaModeloBPMN!Activity
-	(
-			AtividadeInicialBPMN.activityType = #EventStartEmpty and AtividadeFinalBPMN.activityType = #EventEndEmpty and 
-			AtividadesBPM.activityType = #Task
+		AtividadesBPMN: MetaModeloBPMN!Activity,
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			AtividadeInicioBPMN.activityType.toString().startsWith('EventStart')
 		)
 	to
 		AtividadesUML: MetaModeloUML!Activity (
-			name <- AtividadesBPM.name,
+			name <- AtividadesBPMN.name,
 			package <- MetaModeloUML!Model -> allInstances() -> select(model | model.name
 					= 'Modelo UML (gerado)')
-		),
-		StructuredActivity: MetaModeloUML!StructuredActivityNode (
-			name <- AtividadesUML.name,
-			activity <- AtividadesUML			
-		),
-		AtividadeInicialUML: MetaModeloUML!InitialNode (
-			name <- AtividadeInicialBPMN.name,
-			activity <- AtividadesUML
-		),
-		AtividadeFinalUML: MetaModeloUML!ActivityFinalNode (
-			name <- AtividadeFinalBPMN.name,
-			activity <- AtividadesUML
 		)
 }
+
+rule InicioBPMN2InicioUML {
+	from
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			AtividadeInicioBPMN.activityType.toString().startsWith('EventStart')
+		)
+	to
+		AtividadeInicioUML: MetaModeloUML!InitialNode (
+			name <- AtividadeInicioBPMN.name,
+			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
+					AtividadeInicioBPMN.name)
+		)
+}
+
+rule FimBPMN2FimUML {
+	from
+		AtividadeFimBPMN: MetaModeloBPMN!Activity (
+			AtividadeFimBPMN.activityType.toString().startsWith('EventEnd')
+		)
+	to
+		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
+			name <- AtividadeFimBPMN.name,
+			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
+					AtividadeFimBPMN.name)
+		)
+}
+
+rule TaskBPMN2AtividadeEstruturadaUML {
+	from
+		TaskBPMN: MetaModeloBPMN!Activity (
+			TaskBPMN.activityType = #Task
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!StructuredActivityNode (
+			name <- TaskBPMN.name,
+			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
+					TaskBPMN.name)		
+		)
+}
+
 
 rule SequenceEdgeBPM2ControlFlowUML {
 	from
@@ -68,10 +93,11 @@ rule SequenceEdgeBPM2ControlFlowUML {
 			source <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
 					| activityNode.activity.name = SequenceEdgeBPM.source.name),
 			target <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
-					| activityNode.activity.name = SequenceEdgeBPM.target.name)
+					| activityNode.activity.name = SequenceEdgeBPM.target.name),
+			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
+					SequenceEdgeBPM.source.name)
 		)
 }
-
 
 rule PoolBPM2PartitionUML {
 	from
@@ -99,10 +125,5 @@ rule MessagingEdgeBPM2SendControlFlowUML {
 	to
 		SendSignalUML: MetaModeloUML!SendSignalEvent (
 			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
-		) , 
-		ControlFlowUML: MetaModeloUML!ControlFlow		(
-			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
-			
-		)
-		
+		) 		
 }
