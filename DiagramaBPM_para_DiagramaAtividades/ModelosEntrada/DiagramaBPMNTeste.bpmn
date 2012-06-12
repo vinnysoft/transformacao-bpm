@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_wFey0bTHEeGFzo5NkhxYFg" iD="_wFey0LTHEeGFzo5NkhxYFg">
+  <pools xmi:type="bpmn:Pool" xmi:id="_wFxGsbTHEeGFzo5NkhxYFg" iD="_wFxGsLTHEeGFzo5NkhxYFg" name="Piscina">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_wFxtwbTHEeGFzo5NkhxYFg" iD="_wFxtwLTHEeGFzo5NkhxYFg" outgoingEdges="_0qSawbTHEeGFzo5NkhxYFg" name="Tarefa1" activityType="Task"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_0qHboLTHEeGFzo5NkhxYFg" iD="_0qG0kLTHEeGFzo5NkhxYFg" incomingEdges="_0qSawbTHEeGFzo5NkhxYFg" name="Tarefa2" activityType="Task"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_0qSawbTHEeGFzo5NkhxYFg" iD="_0qSawLTHEeGFzo5NkhxYFg"/>
+  </pools>
+</bpmn:BpmnDiagram>
