@@ -1,0 +1,46 @@
+-- @nsURI MetaModeloUML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @nsURI MetaModeloBPMN=http://stp.eclipse.org/bpmn
+
+
+module BPMNparaAtividadePapyrus;
+create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
+
+rule BPMN2UMLPapyrus {
+	from
+		DiagramaBPMN: MetaModeloBPMN!BpmnDiagram
+	to
+		ModeloUML: MetaModeloUML!Model (
+			name <- 'Modelo Atividades UML'
+		),
+		AtividadeUML: MetaModeloUML!Activity (
+			name <- DiagramaBPMN.name,
+			package <- ModeloUML,			
+			node <- MetaModeloUML!ActivityNode.allInstances(),
+			partition <- MetaModeloUML!ActivityPartition.allInstances(),
+			edge <- MetaModeloUML!ActivityEdge.allInstances()
+		)
+}
+
+rule BPMNPool2UMLActivityPartirion {
+	from
+		Pool : MetaModeloBPMN!Pool
+	to 
+		Particao : MetaModeloUML!ActivityPartition(
+			name <- Pool.name,
+			node <- MetaModeloUML!ActivityNode.allInstances(),
+			inActivity <- MetaModeloUML!Activity.allInstances().first()
+		)
+}
+
+rule BPMNTask2UMLOpaqueAction {
+	from
+		Task : MetaModeloBPMN!Activity
+		(Task.activityType = #Task)
+	to 
+		OpaqueAction : MetaModeloUML!OpaqueAction (
+			name <- Task.name,
+			activity <- MetaModeloUML!Activity.allInstances().first()
+		)
+}
+
+
