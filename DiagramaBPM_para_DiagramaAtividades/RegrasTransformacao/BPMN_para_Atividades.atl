@@ -71,3 +71,18 @@ rule SequenceEdgeBPM2ControlFlowUML {
 					| activityNode.activity.name = SequenceEdgeBPM.target.name)
 		)
 }
+
+rule MessagingEdge2SendControlFlowUML {
+	from 
+		MessagingEdgeBPM: MetaModeloBPMN!MessagingEdge
+	to
+		SendSignalUML: MetaModeloUML!SendSignalEvent (
+			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
+		) , 
+		ControlFlowUML: MetaModeloUML!ControlFlow		(
+			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
+			
+		)
+		
+}
+
