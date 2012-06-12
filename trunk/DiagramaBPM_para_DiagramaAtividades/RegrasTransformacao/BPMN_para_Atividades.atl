@@ -21,27 +21,19 @@ helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
 		false
 	endif;
 
-rule DiagramaBPM2ModeloUML {
+rule DiagramaBPMN2ModeloUML {
 	from
-		BPM: MetaModeloBPMN!BpmnDiagram
+		ModeloBPMN: MetaModeloBPMN!BpmnDiagram
 	to
 		ModeloUML: MetaModeloUML!Model (
 			name <- 'Modelo UML (gerado)'
-		)
-}
-
-rule AtividadesBPM2AtividadesUML {
-	from
-		AtividadesBPMN: MetaModeloBPMN!Activity,
-		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
-			AtividadeInicioBPMN.activityType.toString().startsWith('EventStart')
-		)
-	to
-		AtividadesUML: MetaModeloUML!Activity (
-			name <- AtividadesBPMN.name,
-			package <- MetaModeloUML!Model -> allInstances() -> select(model | model.name
-					= 'Modelo UML (gerado)'),
-			partition <- AtividadesBPMN.lanes.first()
+		),
+		AtividadeUML: MetaModeloUML!Activity (
+			name <- 'Atividade (gerada)',
+			package <- ModeloUML,			
+			node <- MetaModeloUML!ActivityNode.allInstances(),
+			partition <- MetaModeloUML!ActivityPartition.allInstances(),
+			edge <- MetaModeloUML!ActivityEdge.allInstances()
 		)
 }
 
@@ -52,9 +44,7 @@ rule InicioBPMN2InicioUML {
 		)
 	to
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
-			name <- AtividadeInicioBPMN.name,
-			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
-					AtividadeInicioBPMN.name)
+			name <- AtividadeInicioBPMN.name
 		)
 }
 
@@ -65,9 +55,7 @@ rule FimBPMN2FimUML {
 		)
 	to
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
-			name <- AtividadeFimBPMN.name,
-			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
-					AtividadeFimBPMN.name)
+			name <- AtividadeFimBPMN.name
 		)
 }
 
@@ -78,9 +66,7 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 		)
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!StructuredActivityNode (
-			name <- TaskBPMN.name,
-			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
-					TaskBPMN.name)
+			name <- TaskBPMN.name
 		)
 }
 
@@ -91,11 +77,9 @@ rule SequenceEdgeBPM2ControlFlowUML {
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
 			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name,
 			source <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
-					| activityNode.activity.name = SequenceEdgeBPM.source.name),
+					| activityNode.name = SequenceEdgeBPM.source.name),
 			target <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
-					| activityNode.activity.name = SequenceEdgeBPM.target.name),
-			activity <- MetaModeloUML!Activity -> allInstances() -> select(a | a.name =
-					SequenceEdgeBPM.source.name)
+					| activityNode.name = SequenceEdgeBPM.target.name)
 		)
 }
 
@@ -124,5 +108,4 @@ rule MessagingEdgeBPM2SendControlFlowUML {
 		SendSignalUML: MetaModeloUML!SendSignalEvent (
 			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
 		)
-	
 }
