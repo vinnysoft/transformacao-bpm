@@ -5,6 +5,22 @@
 module BPMNparaAtividades;
 create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
 
+--Helper para verificar se a atividade é uma atividade inicial.
+helper context MetaModeloBPMN!Activity def: isInitialNode(): Boolean =
+	if self.activityType.toString().startsWith('EventStart') then
+		true
+	else
+		false
+	endif;
+
+--Helper para verificar se a atividade é uma atividade final.
+helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
+	if self.activityType.toString().startsWith('EventEnd') then
+		true
+	else
+		false
+	endif;
+
 rule DiagramaBPM2ModeloUML {
 	from
 		BPM: MetaModeloBPMN!BpmnDiagram
@@ -16,7 +32,13 @@ rule DiagramaBPM2ModeloUML {
 
 rule AtividadesBPM2AtividadesUML {
 	from
-		AtividadesBPM: MetaModeloBPMN!Activity
+	AtividadeInicialBPMN: MetaModeloBPMN!Activity,	
+	AtividadeFinalBPMN: MetaModeloBPMN!Activity,
+	AtividadesBPM: MetaModeloBPMN!Activity
+	(
+			AtividadeInicialBPMN.activityType = #EventStartEmpty and AtividadeFinalBPMN.activityType = #EventEndEmpty and 
+			AtividadesBPM.activityType = #Task
+		)
 	to
 		AtividadesUML: MetaModeloUML!Activity (
 			name <- AtividadesBPM.name,
@@ -24,10 +46,17 @@ rule AtividadesBPM2AtividadesUML {
 					= 'Modelo UML (gerado)')
 		),
 		StructuredActivity: MetaModeloUML!StructuredActivityNode (
-			activity <- AtividadesUML,
-			name <- AtividadesUML.name
+			name <- AtividadesUML.name,
+			activity <- AtividadesUML			
+		),
+		AtividadeInicialUML: MetaModeloUML!InitialNode (
+			name <- AtividadeInicialBPMN.name,
+			activity <- AtividadesUML
+		),
+		AtividadeFinalUML: MetaModeloUML!ActivityFinalNode (
+			name <- AtividadeFinalBPMN.name,
+			activity <- AtividadesUML
 		)
-		
 }
 
 rule SequenceEdgeBPM2ControlFlowUML {
@@ -36,11 +65,9 @@ rule SequenceEdgeBPM2ControlFlowUML {
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
 			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name,
-			source <-  MetaModeloUML!ActivityNode -> allInstances() ->	select
-					(activityNode | activityNode.activity.name =	SequenceEdgeBPM.source.
-					name),
-			target <- MetaModeloUML!ActivityNode -> allInstances() -> select
-					(activityNode | activityNode.activity.name = SequenceEdgeBPM.target.
-					name)
+			source <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
+					| activityNode.activity.name = SequenceEdgeBPM.source.name),
+			target <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
+					| activityNode.activity.name = SequenceEdgeBPM.target.name)
 		)
 }
