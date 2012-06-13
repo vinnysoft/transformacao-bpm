@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_juyhgbVMEeGdOasgIgvR6g" iD="_juyhgLVMEeGdOasgIgvR6g">
+  <artifacts xmi:type="bpmn:TextAnnotation" xmi:id="_-qtYkbVQEeGdOasgIgvR6g" iD="_-qtYkLVQEeGdOasgIgvR6g" name="id:= LA9"/>
+  <artifacts xmi:type="bpmn:TextAnnotation" xmi:id="___FKgbVQEeGdOasgIgvR6g" iD="___FKgLVQEeGdOasgIgvR6g" name="id:= LA8"/>
+  <pools xmi:type="bpmn:Pool" xmi:id="_jwd8gLVMEeGdOasgIgvR6g" iD="_jwdVcLVMEeGdOasgIgvR6g" name="Publisher">
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_68PDEbVNEeGdOasgIgvR6g" iD="_68PDELVNEeGdOasgIgvR6g" name="Delivery Note [sent]">
+      <associations xmi:type="bpmn:Association" xmi:id="_88u7MLVNEeGdOasgIgvR6g"/>
+      <associations xmi:type="bpmn:Association" xmi:id="_KcmZoLVOEeGdOasgIgvR6g"/>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_LZxzkbVOEeGdOasgIgvR6g" iD="_LZxzkLVOEeGdOasgIgvR6g" name="Invoice [sent]">
+      <associations xmi:type="bpmn:Association" xmi:id="_pWEoMLVOEeGdOasgIgvR6g"/>
+      <associations xmi:type="bpmn:Association" xmi:id="_qdF6oLVOEeGdOasgIgvR6g"/>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_jwfxsbVMEeGdOasgIgvR6g" iD="_jwfxsLVMEeGdOasgIgvR6g" associations="_KcmZoLVOEeGdOasgIgvR6g" incomingEdges="_CRrcELVNEeGdOasgIgvR6g" name="Deliver news service" activityType="Task"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="__f7GIbVMEeGdOasgIgvR6g" iD="__f7GILVMEeGdOasgIgvR6g" outgoingEdges="_CRrcELVNEeGdOasgIgvR6g" activityType="EventStartTimer"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_FOvDEbVNEeGdOasgIgvR6g" iD="_FOvDELVNEeGdOasgIgvR6g" associations="_pWEoMLVOEeGdOasgIgvR6g" name="Send invoice">
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_sotdobVOEeGdOasgIgvR6g"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_IaNgkbVNEeGdOasgIgvR6g" iD="_IaNgkLVNEeGdOasgIgvR6g" outgoingEdges="_NeZzMLVNEeGdOasgIgvR6g" name="Receive payment">
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_zi62sbVOEeGdOasgIgvR6g"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_Mp5NEbVNEeGdOasgIgvR6g" iD="_Mp5NELVNEeGdOasgIgvR6g" incomingEdges="_NeZzMLVNEeGdOasgIgvR6g" activityType="EventEndEmpty"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_CRrcELVNEeGdOasgIgvR6g" iD="_CRq1ALVNEeGdOasgIgvR6g"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_NeZzMLVNEeGdOasgIgvR6g" iD="_NeZMILVNEeGdOasgIgvR6g"/>
+  </pools>
+  <pools xmi:type="bpmn:Pool" xmi:id="_QT4ykLVNEeGdOasgIgvR6g" iD="_QT4LgLVNEeGdOasgIgvR6g" name="Bookshop">
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_MWMYgbVOEeGdOasgIgvR6g" iD="_MWMYgLVOEeGdOasgIgvR6g" name="Delivered Note [checked]">
+      <associations xmi:type="bpmn:Association" xmi:id="_eYFQoLVOEeGdOasgIgvR6g"/>
+      <associations xmi:type="bpmn:Association" xmi:id="_fVHgoLVOEeGdOasgIgvR6g"/>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_NI8EEbVOEeGdOasgIgvR6g" iD="_NI8EELVOEeGdOasgIgvR6g" name="Stock [updated]">
+      <associations xmi:type="bpmn:Association" xmi:id="_rnU5ILVOEeGdOasgIgvR6g"/>
+      <associations xmi:type="bpmn:Association" xmi:id="_2SODoLVQEeGdOasgIgvR6g"/>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_2-Z7kLVNEeGdOasgIgvR6g" iD="_2-ZUgLVNEeGdOasgIgvR6g" associations="_88u7MLVNEeGdOasgIgvR6g _eYFQoLVOEeGdOasgIgvR6g" name="Check delivery note" lanes="_nojy8bVNEeGdOasgIgvR6g"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_Z1nLAbVOEeGdOasgIgvR6g" iD="_Z1nLALVOEeGdOasgIgvR6g" associations="_fVHgoLVOEeGdOasgIgvR6g" outgoingEdges="_mkXDobVQEeGdOasgIgvR6g" name="Record Delivery Note" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_hS1xkbVOEeGdOasgIgvR6g" iD="_hS1xkLVOEeGdOasgIgvR6g" associations="_rnU5ILVOEeGdOasgIgvR6g" name="Make statement" lanes="_vaVGIbVNEeGdOasgIgvR6g">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_sotdobVOEeGdOasgIgvR6g"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_lb4qkbVOEeGdOasgIgvR6g" iD="_lb4qkLVOEeGdOasgIgvR6g" associations="_qdF6oLVOEeGdOasgIgvR6g" outgoingEdges="_1VgOoLVOEeGdOasgIgvR6g" name="Record invoice in account" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_xOv0obVOEeGdOasgIgvR6g" iD="_xOv0oLVOEeGdOasgIgvR6g" outgoingEdges="_0HOdobVOEeGdOasgIgvR6g" incomingEdges="_1VgOoLVOEeGdOasgIgvR6g" name="Prepare payment" lanes="_fPnyEbVNEeGdOasgIgvR6g"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_x8g5kbVOEeGdOasgIgvR6g" iD="_x8g5kLVOEeGdOasgIgvR6g" incomingEdges="_0HOdobVOEeGdOasgIgvR6g" name="Record payment" lanes="_ZIxIkbVNEeGdOasgIgvR6g">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_zi62sbVOEeGdOasgIgvR6g"/>
+    </vertices>
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="__FC2EbVOEeGdOasgIgvR6g" iD="__FC2ELVOEeGdOasgIgvR6g" associations="_2SODoLVQEeGdOasgIgvR6g" incomingEdges="_mkXDobVQEeGdOasgIgvR6g" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g">
+      <vertices xmi:type="bpmn:Activity" xmi:id="__FC2E7VOEeGdOasgIgvR6g" iD="__FC2ErVOEeGdOasgIgvR6g" outgoingEdges="_3A1SkbVPEeGdOasgIgvR6g" incomingEdges="_2Jv5kbVPEeGdOasgIgvR6g" name="Update Stock" lanes="_fPnyEbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_HpI-EbVPEeGdOasgIgvR6g" iD="_HpI-ELVPEeGdOasgIgvR6g" outgoingEdges="_gx4kILVPEeGdOasgIgvR6g" lanes="_ZIxIkbVNEeGdOasgIgvR6g" activityType="EventStartEmpty"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_YlqJkbVPEeGdOasgIgvR6g" iD="_YlqJkLVPEeGdOasgIgvR6g" outgoingEdges="_2Jv5kbVPEeGdOasgIgvR6g _D7ZrkbVQEeGdOasgIgvR6g" incomingEdges="_gx4kILVPEeGdOasgIgvR6g" lanes="_ZIxIkbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Z6kuEbVPEeGdOasgIgvR6g" iD="_Z6kuELVPEeGdOasgIgvR6g" outgoingEdges="_hssxIbVQEeGdOasgIgvR6g _jVc3obVQEeGdOasgIgvR6g" incomingEdges="_3A1SkbVPEeGdOasgIgvR6g" lanes="_fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_aqQekbVPEeGdOasgIgvR6g" iD="_aqQekLVPEeGdOasgIgvR6g" outgoingEdges="_evt4EbVPEeGdOasgIgvR6g" incomingEdges="_f4RmILVQEeGdOasgIgvR6g _hssxIbVQEeGdOasgIgvR6g" lanes="_fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_a_KXkbVPEeGdOasgIgvR6g" iD="_a_KXkLVPEeGdOasgIgvR6g" outgoingEdges="_d72LILVPEeGdOasgIgvR6g" incomingEdges="_evt4EbVPEeGdOasgIgvR6g _LQTckbVQEeGdOasgIgvR6g" lanes="_ZIxIkbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_b8lCEbVPEeGdOasgIgvR6g" iD="_b8lCELVPEeGdOasgIgvR6g" incomingEdges="_d72LILVPEeGdOasgIgvR6g" lanes="_ZIxIkbVNEeGdOasgIgvR6g" activityType="EventEndEmpty"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_jzlakbVPEeGdOasgIgvR6g" iD="_jzlakLVPEeGdOasgIgvR6g" outgoingEdges="_cHuFobVQEeGdOasgIgvR6g" incomingEdges="_jVc3obVQEeGdOasgIgvR6g" name="Update Cost" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_lEisIbVPEeGdOasgIgvR6g" iD="_lEisILVPEeGdOasgIgvR6g" outgoingEdges="_HyTEobVQEeGdOasgIgvR6g" incomingEdges="_D7ZrkbVQEeGdOasgIgvR6g" name="Add Book" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_mY_WkbVPEeGdOasgIgvR6g" iD="_mY_WkLVPEeGdOasgIgvR6g" outgoingEdges="_col-EbVQEeGdOasgIgvR6g" incomingEdges="_cHuFobVQEeGdOasgIgvR6g" name="Withdraw outdated copies" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_nHEkkbVPEeGdOasgIgvR6g" iD="_nHEkkLVPEeGdOasgIgvR6g" outgoingEdges="_dJGqIbVQEeGdOasgIgvR6g" incomingEdges="_col-EbVQEeGdOasgIgvR6g" name="Put new price labels" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Eb-pEbVQEeGdOasgIgvR6g" iD="_Eb-pELVQEeGdOasgIgvR6g" outgoingEdges="_IXI3EbVQEeGdOasgIgvR6g" incomingEdges="_HyTEobVQEeGdOasgIgvR6g" name="Put Price Label" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_ExzIEbVQEeGdOasgIgvR6g" iD="_ExzIELVQEeGdOasgIgvR6g" outgoingEdges="_LQTckbVQEeGdOasgIgvR6g" incomingEdges="_IXI3EbVQEeGdOasgIgvR6g" name="Put in bookcase" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_SVy4kbVQEeGdOasgIgvR6g" iD="_SVy4kLVQEeGdOasgIgvR6g" outgoingEdges="_f4RmILVQEeGdOasgIgvR6g" incomingEdges="_dJGqIbVQEeGdOasgIgvR6g" name="Return copies to the shelves" lanes="_ZIxIkbVNEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_d72LILVPEeGdOasgIgvR6g" iD="_d71kELVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_evt4EbVPEeGdOasgIgvR6g" iD="_evt4ELVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_gx4kILVPEeGdOasgIgvR6g" iD="_gx39ELVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2Jv5kbVPEeGdOasgIgvR6g" iD="_2Jv5kLVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_3A1SkbVPEeGdOasgIgvR6g" iD="_3A1SkLVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_D7ZrkbVQEeGdOasgIgvR6g" iD="_D7ZrkLVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_HyTEobVQEeGdOasgIgvR6g" iD="_HyTEoLVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_IXI3EbVQEeGdOasgIgvR6g" iD="_IXI3ELVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_LQTckbVQEeGdOasgIgvR6g" iD="_LQTckLVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_cHuFobVQEeGdOasgIgvR6g" iD="_cHuFoLVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_col-EbVQEeGdOasgIgvR6g" iD="_col-ELVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_dJGqIbVQEeGdOasgIgvR6g" iD="_dJGqILVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_f4RmILVQEeGdOasgIgvR6g" iD="_f4Q_ELVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_hssxIbVQEeGdOasgIgvR6g" iD="_hssxILVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_jVc3obVQEeGdOasgIgvR6g" iD="_jVc3oLVQEeGdOasgIgvR6g"/>
+    </vertices>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_0HOdobVOEeGdOasgIgvR6g" iD="_0HOdoLVOEeGdOasgIgvR6g"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_1VgOoLVOEeGdOasgIgvR6g" iD="_1VfnkLVOEeGdOasgIgvR6g"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_mkXDobVQEeGdOasgIgvR6g" iD="_mkXDoLVQEeGdOasgIgvR6g"/>
+    <lanes xmi:type="bpmn:Lane" xmi:id="_ZIxIkbVNEeGdOasgIgvR6g" iD="_ZIxIkLVNEeGdOasgIgvR6g" name="Administration" activities="_Z1nLAbVOEeGdOasgIgvR6g _lb4qkbVOEeGdOasgIgvR6g _x8g5kbVOEeGdOasgIgvR6g __FC2EbVOEeGdOasgIgvR6g _HpI-EbVPEeGdOasgIgvR6g _YlqJkbVPEeGdOasgIgvR6g _a_KXkbVPEeGdOasgIgvR6g _b8lCEbVPEeGdOasgIgvR6g _jzlakbVPEeGdOasgIgvR6g _lEisIbVPEeGdOasgIgvR6g _mY_WkbVPEeGdOasgIgvR6g _nHEkkbVPEeGdOasgIgvR6g _Eb-pEbVQEeGdOasgIgvR6g _ExzIEbVQEeGdOasgIgvR6g _SVy4kbVQEeGdOasgIgvR6g"/>
+    <lanes xmi:type="bpmn:Lane" xmi:id="_fPnyEbVNEeGdOasgIgvR6g" iD="_fPnyELVNEeGdOasgIgvR6g" name="Accounting" activities="_xOv0obVOEeGdOasgIgvR6g __FC2EbVOEeGdOasgIgvR6g _Z6kuEbVPEeGdOasgIgvR6g _aqQekbVPEeGdOasgIgvR6g __FC2E7VOEeGdOasgIgvR6g"/>
+    <lanes xmi:type="bpmn:Lane" xmi:id="_nojy8bVNEeGdOasgIgvR6g" iD="_nojy8LVNEeGdOasgIgvR6g" name="Warehouse" activities="_2-Z7kLVNEeGdOasgIgvR6g"/>
+    <lanes xmi:type="bpmn:Lane" xmi:id="_vaVGIbVNEeGdOasgIgvR6g" iD="_vaVGILVNEeGdOasgIgvR6g" name="Showroom" activities="_hS1xkbVOEeGdOasgIgvR6g"/>
+  </pools>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_sotdobVOEeGdOasgIgvR6g" iD="_sotdoLVOEeGdOasgIgvR6g" source="_hS1xkbVOEeGdOasgIgvR6g" target="_FOvDEbVNEeGdOasgIgvR6g"/>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_zi62sbVOEeGdOasgIgvR6g" iD="_zi62sLVOEeGdOasgIgvR6g" source="_x8g5kbVOEeGdOasgIgvR6g" target="_IaNgkbVNEeGdOasgIgvR6g"/>
+</bpmn:BpmnDiagram>
