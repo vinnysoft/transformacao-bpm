@@ -230,7 +230,7 @@
             <styles xmi:type="notation:FillStyle" xmi:id="_aqSTw7VPEeGdOasgIgvR6g"/>
             <styles xmi:type="notation:LineStyle" xmi:id="_aqSTxLVPEeGdOasgIgvR6g" lineColor="0"/>
             <element xmi:type="bpmn:Activity" href="BookConsignment.bpmn#_aqQekbVPEeGdOasgIgvR6g"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aqSTxbVPEeGdOasgIgvR6g" x="503" y="9"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_aqSTxbVPEeGdOasgIgvR6g" x="540" y="9"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_a_LlsLVPEeGdOasgIgvR6g" type="2001">
             <children xmi:type="notation:Node" xmi:id="_a_MMwLVPEeGdOasgIgvR6g" type="4001"/>
@@ -239,7 +239,7 @@
             <styles xmi:type="notation:FillStyle" xmi:id="_a_Lls7VPEeGdOasgIgvR6g"/>
             <styles xmi:type="notation:LineStyle" xmi:id="_a_LltLVPEeGdOasgIgvR6g" lineColor="0"/>
             <element xmi:type="bpmn:Activity" href="BookConsignment.bpmn#_a_KXkbVPEeGdOasgIgvR6g"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_a_LltbVPEeGdOasgIgvR6g" x="584" y="122"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_a_LltbVPEeGdOasgIgvR6g" x="624" y="118"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_b8mQMLVPEeGdOasgIgvR6g" type="2001">
             <children xmi:type="notation:Node" xmi:id="_b8m3QLVPEeGdOasgIgvR6g" type="4001"/>
@@ -311,7 +311,7 @@
             <styles xmi:type="notation:FillStyle" xmi:id="_SV0Gs7VQEeGdOasgIgvR6g"/>
             <styles xmi:type="notation:LineStyle" xmi:id="_SV0GtLVQEeGdOasgIgvR6g" lineColor="0"/>
             <element xmi:type="bpmn:Activity" href="BookConsignment.bpmn#_SVy4kbVQEeGdOasgIgvR6g"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SV0GtbVQEeGdOasgIgvR6g" x="498" y="81" width="64"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_SV0GtbVQEeGdOasgIgvR6g" x="481" y="81" width="64"/>
           </children>
           <styles xmi:type="notation:DrawerStyle" xmi:id="__FFSUrVOEeGdOasgIgvR6g"/>
           <styles xmi:type="notation:SortingStyle" xmi:id="__FFSU7VOEeGdOasgIgvR6g"/>
@@ -596,7 +596,7 @@
     <children xmi:type="notation:Node" xmi:id="_LQV40LVQEeGdOasgIgvR6g" type="4012">
       <styles xmi:type="notation:FillStyle" xmi:id="_LQV40bVQEeGdOasgIgvR6g" fillColor="16776959"/>
       <styles xmi:type="notation:LineStyle" xmi:id="_LQV40rVQEeGdOasgIgvR6g" lineColor="16776959"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_LQV407VQEeGdOasgIgvR6g" y="40"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_LQV407VQEeGdOasgIgvR6g" y="-10"/>
     </children>
     <styles xmi:type="notation:RoutingStyle" xmi:id="_LQVRwbVQEeGdOasgIgvR6g" routing="Rectilinear" smoothness="Normal" closestDistance="true"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_LQVRwrVQEeGdOasgIgvR6g" fontName="Arial"/>
@@ -640,23 +640,11 @@
     <element xmi:type="bpmn:SequenceEdge" href="BookConsignment.bpmn#_dJGqIbVQEeGdOasgIgvR6g"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_dJH4RLVQEeGdOasgIgvR6g" points="[19, -8, -38, -9]$[35, -8, -22, -9]"/>
   </edges>
-  <edges xmi:type="notation:Edge" xmi:id="_f4S0QLVQEeGdOasgIgvR6g" type="3001" source="_SV0GsLVQEeGdOasgIgvR6g" target="_aqSTwLVPEeGdOasgIgvR6g">
-    <children xmi:type="notation:Node" xmi:id="_f4TbULVQEeGdOasgIgvR6g" type="4012">
-      <styles xmi:type="notation:FillStyle" xmi:id="_f4TbUbVQEeGdOasgIgvR6g" fillColor="16776959"/>
-      <styles xmi:type="notation:LineStyle" xmi:id="_f4TbUrVQEeGdOasgIgvR6g" lineColor="16776959"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_f4TbU7VQEeGdOasgIgvR6g" y="-10"/>
-    </children>
-    <styles xmi:type="notation:RoutingStyle" xmi:id="_f4S0QbVQEeGdOasgIgvR6g" routing="Rectilinear" smoothness="Normal" closestDistance="true"/>
-    <styles xmi:type="notation:FontStyle" xmi:id="_f4S0QrVQEeGdOasgIgvR6g" fontName="Arial"/>
-    <styles xmi:type="notation:LineStyle" xmi:id="_f4S0Q7VQEeGdOasgIgvR6g" lineColor="0"/>
-    <element xmi:type="bpmn:SequenceEdge" href="BookConsignment.bpmn#_f4RmILVQEeGdOasgIgvR6g"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_f4S0RLVQEeGdOasgIgvR6g" points="[23, -22, -18, 26]$[41, -30, 0, 18]"/>
-  </edges>
   <edges xmi:type="notation:Edge" xmi:id="_hsumULVQEeGdOasgIgvR6g" type="3001" source="_Z6l8MLVPEeGdOasgIgvR6g" target="_aqSTwLVPEeGdOasgIgvR6g">
     <children xmi:type="notation:Node" xmi:id="_hsvNYLVQEeGdOasgIgvR6g" type="4012">
       <styles xmi:type="notation:FillStyle" xmi:id="_hsvNYbVQEeGdOasgIgvR6g" fillColor="16776959"/>
       <styles xmi:type="notation:LineStyle" xmi:id="_hsvNYrVQEeGdOasgIgvR6g" lineColor="16776959"/>
-      <layoutConstraint xmi:type="notation:Location" xmi:id="_hsvNY7VQEeGdOasgIgvR6g" y="40"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_hsvNY7VQEeGdOasgIgvR6g" y="-10"/>
     </children>
     <styles xmi:type="notation:RoutingStyle" xmi:id="_hsumUbVQEeGdOasgIgvR6g" routing="Rectilinear" smoothness="Normal" closestDistance="true"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_hsumUrVQEeGdOasgIgvR6g" fontName="Arial"/>
@@ -694,5 +682,17 @@
     <styles xmi:type="notation:LineStyle" xmi:id="_2SP407VQEeGdOasgIgvR6g" lineColor="0"/>
     <element xmi:type="bpmn:Association" href="BookConsignment.bpmn#_2SODoLVQEeGdOasgIgvR6g"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_2SP41LVQEeGdOasgIgvR6g" points="[10, 15, 135, -207]$[-63, 122, 62, -100]"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_ktWvoLVZEeGahKjtn23FSw" type="3001" source="_SV0GsLVQEeGdOasgIgvR6g" target="_aqSTwLVPEeGdOasgIgvR6g">
+    <children xmi:type="notation:Node" xmi:id="_ktbBELVZEeGahKjtn23FSw" type="4012">
+      <styles xmi:type="notation:FillStyle" xmi:id="_ktbBEbVZEeGahKjtn23FSw" fillColor="16776959"/>
+      <styles xmi:type="notation:LineStyle" xmi:id="_ktbBErVZEeGahKjtn23FSw" lineColor="16776959"/>
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_ktbBE7VZEeGahKjtn23FSw" y="-10"/>
+    </children>
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_ktWvobVZEeGahKjtn23FSw" routing="Rectilinear" smoothness="Normal" closestDistance="true"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_ktWvorVZEeGahKjtn23FSw" fontName="Arial"/>
+    <styles xmi:type="notation:LineStyle" xmi:id="_ktWvo7VZEeGahKjtn23FSw" lineColor="0"/>
+    <element xmi:type="bpmn:SequenceEdge" href="BookConsignment.bpmn#_ktQpAbVZEeGahKjtn23FSw"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ktWvpLVZEeGahKjtn23FSw" points="[16, -22, -12, 35]$[32, -43, 4, 14]"/>
   </edges>
 </notation:Diagram>
