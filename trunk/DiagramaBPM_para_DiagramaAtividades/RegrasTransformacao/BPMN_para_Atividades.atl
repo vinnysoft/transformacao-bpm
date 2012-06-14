@@ -40,13 +40,14 @@ rule DiagramaBPMN2ModeloUML {
 rule InicioBPMN2InicioUML {
 	from
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
-			AtividadeInicioBPMN.activityType.toString().startsWith('EventStart')
+			AtividadeInicioBPMN.activityType.toString().startsWith('EventStart') 
 		)
 	to
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
-			name <- AtividadeInicioBPMN.name
-		)
+			name <- AtividadeInicioBPMN.name		
+			)
 }
+
 
 rule FimBPMN2FimUML {
 	from
@@ -59,6 +60,10 @@ rule FimBPMN2FimUML {
 		)
 }
 
+
+
+
+
 rule TaskBPMN2AtividadeEstruturadaUML {
 	from
 		TaskBPMN: MetaModeloBPMN!Activity (
@@ -69,6 +74,29 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 			name <- TaskBPMN.name
 		)
 }
+
+rule ExclusiveGatewayBPMN2DecisionNodeUML {
+	from
+		ExclusiveGatewayBPMN: MetaModeloBPMN!Activity (
+			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!DecisionNode (
+			name <- 'ExclusiveGateway ID:' + ExclusiveGatewayBPMN.iD
+		)
+}
+
+rule SubProcessBPMN2DecisionNodeUML {
+	from
+		SubProcessBPMN: MetaModeloBPMN!Activity (
+			SubProcessBPMN.activityType = #SubProcess
+		)
+	to
+		ExpansionRegionUML: MetaModeloUML!ExpansionRegion (
+			name <- SubProcessBPMN.name
+		)
+}
+
 
 rule SequenceEdgeBPM2ControlFlowUML {
 	from
