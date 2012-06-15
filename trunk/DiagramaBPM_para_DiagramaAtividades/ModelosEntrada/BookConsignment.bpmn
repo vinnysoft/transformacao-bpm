@@ -25,7 +25,7 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_1cTHwbaOEeGlz_7xtEQVig" iD="_1cTHwLaOEeGlz_7xtEQVig" outgoingEdges="_6Yoe4baOEeGlz_7xtEQVig" incomingEdges="_2wUUYbaOEeGlz_7xtEQVig" name="Any"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_1uxX0baOEeGlz_7xtEQVig" iD="_1uxX0LaOEeGlz_7xtEQVig" outgoingEdges="_68RXcLaOEeGlz_7xtEQVig" incomingEdges="_3ETAUbaOEeGlz_7xtEQVig" name="Any Task"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_5tU18bW7EeGr3Z2Tg779Lw" iD="_5tU18LW7EeGr3Z2Tg779Lw"/>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2wUUYbaOEeGlz_7xtEQVig" iD="_2wUUYLaOEeGlz_7xtEQVig"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2wUUYbaOEeGlz_7xtEQVig" iD="_2wUUYLaOEeGlz_7xtEQVig" conditionType="Default" isDefault="true"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_3ETAUbaOEeGlz_7xtEQVig" iD="_3ETAULaOEeGlz_7xtEQVig"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_3psMYbaOEeGlz_7xtEQVig" iD="_3psMYLaOEeGlz_7xtEQVig"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_6Yoe4baOEeGlz_7xtEQVig" iD="_6Yoe4LaOEeGlz_7xtEQVig"/>
