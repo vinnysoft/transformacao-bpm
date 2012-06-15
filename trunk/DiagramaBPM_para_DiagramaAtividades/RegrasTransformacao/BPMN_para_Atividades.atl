@@ -72,7 +72,7 @@ rule InicioBPMN2InicioUML {
 	to
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
 			name <- AtividadeInicioBPMN.name,
-			inPartition <- AtividadeInicioBPMN.lanes,
+			inPartition <- AtividadeInicioBPMN.lanes.union(AtividadeInicioBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges
 		)
@@ -86,7 +86,7 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 	to
 		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
 			name <- AtividadeInicioBPMN.name,
-			inPartition <- AtividadeInicioBPMN.lanes,
+			inPartition <- AtividadeInicioBPMN.lanes.union(AtividadeInicioBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges
 		)
@@ -101,13 +101,13 @@ rule FimBPMN2FimUML {
 	to
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
 			name <- AtividadeFimBPMN.name,
-			inPartition <- AtividadeFimBPMN.lanes,
+			inPartition <- AtividadeFimBPMN.lanes.union(AtividadeFimBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- AtividadeFimBPMN.incomingEdges,
 			outgoing <- AtividadeFimBPMN.outgoingEdges
 		)
 }
 
-rule TaskBPMN2AtividadeEstruturadaUML {
+rule TaskBPMN2OpaqueAction {
 	from
 		TaskBPMN: MetaModeloBPMN!Activity (
 			TaskBPMN.activityType = #Task
@@ -115,7 +115,7 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 	to
 		OpaqueAction: MetaModeloUML!OpaqueAction (
 			name <- TaskBPMN.name,
-			inPartition <- TaskBPMN.lanes,
+			inPartition <- TaskBPMN.lanes.union(TaskBPMN.lanes -> collect(lane | lane.pool)),
 			outgoing <- TaskBPMN.outgoingEdges,
 			incoming <- TaskBPMN.incomingEdges
 		)
@@ -131,7 +131,7 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!DecisionNode (
 			name <- 'ExclusiveGateway ID:' + ExclusiveGatewayBPMN.iD,
-			inPartition <- ExclusiveGatewayBPMN.lanes,
+			inPartition <- ExclusiveGatewayBPMN.lanes.union(ExclusiveGatewayBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- ExclusiveGatewayBPMN.incomingEdges,
 			outgoing <- ExclusiveGatewayBPMN.outgoingEdges
 		)
@@ -148,6 +148,7 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!ForkNode (
 			name <- InclusiveGatewayBPMN.iD,
+			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
 			outgoing <- InclusiveGatewayBPMN.outgoingEdges
 		)
@@ -164,6 +165,7 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!JoinNode (
 			name <- InclusiveGatewayBPMN.iD,
+			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
 			outgoing <- InclusiveGatewayBPMN.outgoingEdges
 		)
@@ -179,6 +181,7 @@ rule ParallelGatewayBPMN2ForkNodeUML {
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!ForkNode (
 			name <- ParallelGatewayBPMN.iD,
+			inPartition <- ParallelGatewayBPMN.lanes.union(ParallelGatewayBPMN.lanes -> collect(lane | lane.pool)),
 			incoming <- ParallelGatewayBPMN.incomingEdges,
 			outgoing <- ParallelGatewayBPMN.outgoingEdges
 		)
@@ -193,10 +196,9 @@ rule ParallelGatewayBPMN2JoinNodeUML {
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!JoinNode (
 			name <- ParallelGatewayBPMN.iD,
-			incoming <- ParallelGatewayBPMN.incomingEdges.union(ParallelGatewayBPMN.
-					incomingMessages),
-			outgoing <- ParallelGatewayBPMN.outgoingEdges.union(ParallelGatewayBPMN.
-					outgoingMessages)
+			inPartition <- ParallelGatewayBPMN.lanes.union(ParallelGatewayBPMN.lanes -> collect(lane | lane.pool)),
+			incoming <- ParallelGatewayBPMN.incomingEdges,
+			outgoing <- ParallelGatewayBPMN.outgoingEdges
 		)
 }
 
@@ -209,11 +211,9 @@ rule SubProcessBPMN2ExpansionRegionUML {
 	to
 		ExpansionRegionUML: MetaModeloUML!ExpansionRegion (
 			name <- SubProcessBPMN.name,
-			inPartition <- SubProcessBPMN.lanes,
-			incoming <- SubProcessBPMN.incomingEdges.union(SubProcessBPMN.
-					incomingMessages),
-			outgoing <- SubProcessBPMN.outgoingEdges.union(SubProcessBPMN.
-					outgoingMessages)
+			inPartition <- SubProcessBPMN.lanes.union(SubProcessBPMN.lanes -> collect(lane | lane.pool)),
+			incoming <- SubProcessBPMN.incomingEdges,
+			outgoing <- SubProcessBPMN.outgoingEdges
 		)
 }
 
@@ -273,11 +273,13 @@ rule SequenceEdgeBPM2ControlFlowUML {
 rule SequenceEdgeBPM2ControlFlowUMLNames {
 	from
 		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (
-			not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.isTargetNameNull()
+			not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.
+					isTargetNameNull()
 		)
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- SequenceEdgeBPM.source.name.toString() + '->' + SequenceEdgeBPM.target.name.toString()
+			name <- SequenceEdgeBPM.source.name.toString() + '->' + SequenceEdgeBPM.
+					target.name.toString()
 		)
 }
 
@@ -288,7 +290,7 @@ rule PoolBPM2PartitionUML {
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
 			name <- PoolBPM.name,
-			edge <- PoolBPM.incomingMessages.union(PoolBPM.outgoingMessages)
+			subpartition <- PoolBPM.lanes
 		)
 }
 
