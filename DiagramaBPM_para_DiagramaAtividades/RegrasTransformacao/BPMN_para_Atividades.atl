@@ -300,8 +300,7 @@ rule LaneBPM2PartitionUML {
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
 			name <- LaneBPM.name,
-			superPartition <- MetaModeloUML!ActivityPartition -> allInstances() ->
-					select(partition | partition.name = LaneBPM.pool.name)
+			superPartition <- LaneBPM.pool
 		)
 }
 
