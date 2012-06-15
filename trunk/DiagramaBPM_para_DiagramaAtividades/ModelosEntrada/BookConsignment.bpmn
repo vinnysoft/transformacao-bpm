@@ -46,8 +46,8 @@
     <vertices xmi:type="bpmn:SubProcess" xmi:id="__FC2EbVOEeGdOasgIgvR6g" iD="__FC2ELVOEeGdOasgIgvR6g" associations="_2SODoLVQEeGdOasgIgvR6g" incomingEdges="_mkXDobVQEeGdOasgIgvR6g" name="Sub1" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g">
       <vertices xmi:type="bpmn:Activity" xmi:id="__FC2E7VOEeGdOasgIgvR6g" iD="__FC2ErVOEeGdOasgIgvR6g" outgoingEdges="_3A1SkbVPEeGdOasgIgvR6g" incomingEdges="_2Jv5kbVPEeGdOasgIgvR6g" name="Update Stock" lanes="_fPnyEbVNEeGdOasgIgvR6g"/>
       <vertices xmi:type="bpmn:Activity" xmi:id="_HpI-EbVPEeGdOasgIgvR6g" iD="_HpI-ELVPEeGdOasgIgvR6g" outgoingEdges="_gx4kILVPEeGdOasgIgvR6g" name="Inicio sub1" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g" activityType="EventStartEmpty"/>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_YlqJkbVPEeGdOasgIgvR6g" iD="_YlqJkLVPEeGdOasgIgvR6g" outgoingEdges="_2Jv5kbVPEeGdOasgIgvR6g _D7ZrkbVQEeGdOasgIgvR6g" incomingEdges="_gx4kILVPEeGdOasgIgvR6g" name="gate1" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_Z6kuEbVPEeGdOasgIgvR6g" iD="_Z6kuELVPEeGdOasgIgvR6g" outgoingEdges="_hssxIbVQEeGdOasgIgvR6g _jVc3obVQEeGdOasgIgvR6g" incomingEdges="_3A1SkbVPEeGdOasgIgvR6g" name="gate2" lanes="_fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_YlqJkbVPEeGdOasgIgvR6g" iD="_YlqJkLVPEeGdOasgIgvR6g" outgoingEdges="_2Jv5kbVPEeGdOasgIgvR6g _D7ZrkbVQEeGdOasgIgvR6g" incomingEdges="_gx4kILVPEeGdOasgIgvR6g" documentation="" name="exist?" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Z6kuEbVPEeGdOasgIgvR6g" iD="_Z6kuELVPEeGdOasgIgvR6g" outgoingEdges="_hssxIbVQEeGdOasgIgvR6g _jVc3obVQEeGdOasgIgvR6g" incomingEdges="_3A1SkbVPEeGdOasgIgvR6g" name="Stock and prices checking cost changes?" lanes="_fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
       <vertices xmi:type="bpmn:Activity" xmi:id="_aqQekbVPEeGdOasgIgvR6g" iD="_aqQekLVPEeGdOasgIgvR6g" outgoingEdges="_evt4EbVPEeGdOasgIgvR6g" incomingEdges="_hssxIbVQEeGdOasgIgvR6g _ktQpAbVZEeGahKjtn23FSw" name="" lanes="_fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
       <vertices xmi:type="bpmn:Activity" xmi:id="_a_KXkbVPEeGdOasgIgvR6g" iD="_a_KXkLVPEeGdOasgIgvR6g" outgoingEdges="_d72LILVPEeGdOasgIgvR6g" incomingEdges="_evt4EbVPEeGdOasgIgvR6g _LQTckbVQEeGdOasgIgvR6g" name="gate4" lanes="_ZIxIkbVNEeGdOasgIgvR6g _fPnyEbVNEeGdOasgIgvR6g" activityType="GatewayDataBasedExclusive"/>
       <vertices xmi:type="bpmn:Activity" xmi:id="_b8lCEbVPEeGdOasgIgvR6g" iD="_b8lCELVPEeGdOasgIgvR6g" incomingEdges="_d72LILVPEeGdOasgIgvR6g" name="Fim sub1" lanes="_ZIxIkbVNEeGdOasgIgvR6g" activityType="EventEndEmpty"/>
@@ -61,7 +61,7 @@
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_d72LILVPEeGdOasgIgvR6g" iD="_d71kELVPEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_evt4EbVPEeGdOasgIgvR6g" iD="_evt4ELVPEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_gx4kILVPEeGdOasgIgvR6g" iD="_gx39ELVPEeGdOasgIgvR6g"/>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2Jv5kbVPEeGdOasgIgvR6g" iD="_2Jv5kLVPEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2Jv5kbVPEeGdOasgIgvR6g" iD="_2Jv5kLVPEeGdOasgIgvR6g" conditionType="Default" isDefault="true"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_3A1SkbVPEeGdOasgIgvR6g" iD="_3A1SkLVPEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_D7ZrkbVQEeGdOasgIgvR6g" iD="_D7ZrkLVQEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_HyTEobVQEeGdOasgIgvR6g" iD="_HyTEoLVQEeGdOasgIgvR6g"/>
@@ -70,7 +70,7 @@
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_cHuFobVQEeGdOasgIgvR6g" iD="_cHuFoLVQEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_col-EbVQEeGdOasgIgvR6g" iD="_col-ELVQEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_dJGqIbVQEeGdOasgIgvR6g" iD="_dJGqILVQEeGdOasgIgvR6g"/>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_hssxIbVQEeGdOasgIgvR6g" iD="_hssxILVQEeGdOasgIgvR6g"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_hssxIbVQEeGdOasgIgvR6g" iD="_hssxILVQEeGdOasgIgvR6g" name="" conditionType="Default" isDefault="true"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_jVc3obVQEeGdOasgIgvR6g" iD="_jVc3oLVQEeGdOasgIgvR6g"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ktQpAbVZEeGahKjtn23FSw" iD="_ktQpALVZEeGahKjtn23FSw"/>
     </vertices>
