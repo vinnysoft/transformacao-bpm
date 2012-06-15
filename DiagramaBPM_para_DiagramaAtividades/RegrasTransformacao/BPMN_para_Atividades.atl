@@ -71,7 +71,8 @@ rule InicioBPMN2InicioUML {
 		)
 	to
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
-			name <- AtividadeInicioBPMN.name
+			name <- AtividadeInicioBPMN.name,
+			inPartition <- AtividadeInicioBPMN.lanes
 		)
 }
 
@@ -82,7 +83,8 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 		)
 	to
 		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
-			name <- AtividadeInicioBPMN.name
+			name <- AtividadeInicioBPMN.name,
+			inPartition <- AtividadeInicioBPMN.lanes
 		)
 }
 
@@ -94,7 +96,8 @@ rule FimBPMN2FimUML {
 		)
 	to
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
-			name <- AtividadeFimBPMN.name
+			name <- AtividadeFimBPMN.name,
+			inPartition <- AtividadeFimBPMN.lanes
 		)
 }
 
@@ -104,7 +107,7 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 			TaskBPMN.activityType = #Task
 		)
 	to
-		OpaqueAction : MetaModeloUML!OpaqueAction (
+		OpaqueAction: MetaModeloUML!OpaqueAction (
 			name <- TaskBPMN.name,
 			inPartition <- TaskBPMN.lanes
 		)
@@ -118,7 +121,8 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 		)
 	to
 		AtividadeEstruturadaUML: MetaModeloUML!DecisionNode (
-			name <- 'ExclusiveGateway ID:' + ExclusiveGatewayBPMN.iD
+			name <- 'ExclusiveGateway ID:' + ExclusiveGatewayBPMN.iD,
+			inPartition <- ExclusiveGatewayBPMN.lanes
 		)
 }
 
@@ -130,7 +134,8 @@ rule SubProcessBPMN2ExpansionRegionUML {
 		)
 	to
 		ExpansionRegionUML: MetaModeloUML!ExpansionRegion (
-			name <- SubProcessBPMN.name
+			name <- SubProcessBPMN.name,
+			inPartition <- SubProcessBPMN.lanes
 		)
 }
 
@@ -207,6 +212,7 @@ rule SequenceEdgeBPM2ControlFlowUMLNames {
 		)
 }
 
+--Rule para mapear os PoolsBPMN em ActivityPartitions
 rule PoolBPM2PartitionUML {
 	from
 		PoolBPM: MetaModeloBPMN!Pool
@@ -216,12 +222,15 @@ rule PoolBPM2PartitionUML {
 		)
 }
 
+--Rule para mapear as LanesBPMN em ActivityPartitions
 rule LaneBPM2PartitionUML {
 	from
 		LaneBPM: MetaModeloBPMN!Lane
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			name <- LaneBPM.name
+			name <- LaneBPM.name,
+			superPartition <- MetaModeloUML!ActivityPartition -> allInstances() ->
+					select(partition | partition.name = LaneBPM.pool.name)
 		)
 }
 
