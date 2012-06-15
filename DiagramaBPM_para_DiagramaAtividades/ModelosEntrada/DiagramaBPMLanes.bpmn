@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_eFvK0bHJEeGpVrvESmhnQQ" iD="_eFvK0LHJEeGpVrvESmhnQQ" name="DiagramaBPM">
-  <pools xmi:type="bpmn:Pool" xmi:id="_Nm81MbJuEeGvn57fhNMmiQ" iD="_Nm81MLJuEeGvn57fhNMmiQ" name="Cliente">
+  <pools xmi:type="bpmn:Pool" xmi:id="_Nm81MbJuEeGvn57fhNMmiQ" iD="_Nm81MLJuEeGvn57fhNMmiQ" name="Restaurante">
     <vertices xmi:type="bpmn:Activity" xmi:id="_SaL6sbJuEeGvn57fhNMmiQ" iD="_SaL6sLJuEeGvn57fhNMmiQ" outgoingEdges="_ZlzM0bJuEeGvn57fhNMmiQ" name="Início" lanes="_bgX70bQeEeGvMfwFAxpG-A" activityType="EventStartEmpty"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_TSVDobJuEeGvn57fhNMmiQ" iD="_TSVDoLJuEeGvn57fhNMmiQ" outgoingEdges="_u-L_YbQeEeGvMfwFAxpG-A" incomingEdges="_ZlzM0bJuEeGvn57fhNMmiQ" name="Chega ao Restaurante" lanes="_bgX70bQeEeGvMfwFAxpG-A"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_eqPXEbJuEeGvn57fhNMmiQ" iD="_eqPXELJuEeGvn57fhNMmiQ" outgoingEdges="_u2BCIbJuEeGvn57fhNMmiQ" incomingEdges="_vtG64bQeEeGvMfwFAxpG-A" name="Serve-se no buffet" lanes="_bgX70bQeEeGvMfwFAxpG-A"/>
