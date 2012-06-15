@@ -7,8 +7,8 @@ create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
 
 --Helper para verificar se a atividade é uma atividade inicial.
 helper context MetaModeloBPMN!Activity def: isInitialNode(): Boolean =
-	if self.activityType.toString().startsWith('EventStart') and self.activityType <> #EventStartTimer 
-	then
+	if self.activityType.toString().startsWith('EventStart') and self.activityType <>
+			#EventStartTimer then
 		true
 	else
 		false
@@ -16,8 +16,7 @@ helper context MetaModeloBPMN!Activity def: isInitialNode(): Boolean =
 
 --Helper para verificar se a atividade é um EventStartTimer.
 helper context MetaModeloBPMN!Activity def: isInitialTimerNode(): Boolean =
-	if self.activityType = #EventStartTimer 
-	then
+	if self.activityType = #EventStartTimer then
 		true
 	else
 		false
@@ -32,21 +31,22 @@ helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
 	endif;
 
 --Helper para verificar se source name é null
-helper context MetaModeloBPMN!SequenceEdge def: isSourceNameNull(): Boolean = 
-	if self.source.name.toString().size() = 0 	then 
+helper context MetaModeloBPMN!SequenceEdge def: isSourceNameNull(): Boolean =
+	if self.source.name.toString().size() = 0 then
 		true
 	else
 		false
 	endif;
 
 --Helper para verificar se o target name é null
-helper context MetaModeloBPMN!SequenceEdge def: isTargetNameNull(): Boolean = 
-	if self.target.name.toString().size() = 0 	then 
+helper context MetaModeloBPMN!SequenceEdge def: isTargetNameNull(): Boolean =
+	if self.target.name.toString().size() = 0 then
 		true
 	else
 		false
 	endif;
 
+--Rule para criar uma atividade e modelo UML por cada diagrama BPMN.
 rule DiagramaBPMN2ModeloUML {
 	from
 		ModeloBPMN: MetaModeloBPMN!BpmnDiagram
@@ -56,7 +56,7 @@ rule DiagramaBPMN2ModeloUML {
 		),
 		AtividadeUML: MetaModeloUML!Activity (
 			name <- 'Atividade (gerada)',
-			package <- ModeloUML,			
+			package <- ModeloUML,
 			node <- MetaModeloUML!ActivityNode.allInstances(),
 			partition <- MetaModeloUML!ActivityPartition.allInstances(),
 			edge <- MetaModeloUML!ActivityEdge.allInstances()
@@ -66,23 +66,25 @@ rule DiagramaBPMN2ModeloUML {
 -- rules para eventos de inicio
 rule InicioBPMN2InicioUML {
 	from
-		AtividadeInicioBPMN: MetaModeloBPMN!Activity (AtividadeInicioBPMN.isInitialNode())		
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			AtividadeInicioBPMN.isInitialNode()
+		)
 	to
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
-			name <- AtividadeInicioBPMN.name		
-			)
+			name <- AtividadeInicioBPMN.name
+		)
 }
-
 
 rule EventStartTimerBPMN2AcceptEventActionUML {
 	from
-		AtividadeInicioBPMN: MetaModeloBPMN!Activity (AtividadeInicioBPMN.isInitialTimerNode())		
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			AtividadeInicioBPMN.isInitialTimerNode()
+		)
 	to
 		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
-			name <- AtividadeInicioBPMN.name		
-			)
+			name <- AtividadeInicioBPMN.name
+		)
 }
-
 
 -- rules para eventos de fim
 rule FimBPMN2FimUML {
@@ -96,18 +98,15 @@ rule FimBPMN2FimUML {
 		)
 }
 
-
-
-
-
 rule TaskBPMN2AtividadeEstruturadaUML {
 	from
 		TaskBPMN: MetaModeloBPMN!Activity (
 			TaskBPMN.activityType = #Task
 		)
 	to
-		AtividadeEstruturadaUML: MetaModeloUML!StructuredActivityNode (
-			name <- TaskBPMN.name
+		OpaqueAction : MetaModeloUML!OpaqueAction (
+			name <- TaskBPMN.name,
+			inPartition <- TaskBPMN.lanes
 		)
 }
 
@@ -135,20 +134,16 @@ rule SubProcessBPMN2ExpansionRegionUML {
 		)
 }
 
-
 -- Rule Data Object para Artefato
 rule DataObjectBPMN2ObjectNodeUML {
 	from
 		DataObjectBPMN: MetaModeloBPMN!DataObject
 	to
-		
 		--ObjetoUML: MetaModeloUML!ObjectNode (
 		ArtefatoUML: MetaModeloUML!Artifact (
-			name <- DataObjectBPMN.name	
+			name <- DataObjectBPMN.name
 		)
 }
-
-
 
 -- Rule Association para Object Flow
 rule AssociationBPMN2ObjectFlowUML {
@@ -156,7 +151,7 @@ rule AssociationBPMN2ObjectFlowUML {
 		AssociationBPMN: MetaModeloBPMN!Association
 	to
 		ObjectFlowUML: MetaModeloUML!ObjectFlow (
-			name <- AssociationBPMN.source.name + '->' + AssociationBPMN.target.name 	
+			name <- AssociationBPMN.source.name + '->' + AssociationBPMN.target.name
 		)
 }
 
@@ -169,7 +164,6 @@ rule TextBPMN2CommentUML {
 			body <- TextBPMN.documentation
 		)
 }
-
 
 -- Rule para transformação de Group  em Partition
 rule GroupBPMN2ActivityGroupUML {
@@ -184,7 +178,9 @@ rule GroupBPMN2ActivityGroupUML {
 -- rules para transformação das sequence edge BPMN em control flow UML
 rule SequenceEdgeBPM2ControlFlowUML {
 	from
-		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (SequenceEdgeBPM.isSourceNameNull() or SequenceEdgeBPM.isTargetNameNull())
+		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (
+			SequenceEdgeBPM.isSourceNameNull() or SequenceEdgeBPM.isTargetNameNull()
+		)
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
 			name <- SequenceEdgeBPM.source.iD + '->' + SequenceEdgeBPM.target.iD,
@@ -197,7 +193,10 @@ rule SequenceEdgeBPM2ControlFlowUML {
 
 rule SequenceEdgeBPM2ControlFlowUMLNames {
 	from
-		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.isTargetNameNull())
+		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (
+			not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.
+					isTargetNameNull()
+		)
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
 			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name,
