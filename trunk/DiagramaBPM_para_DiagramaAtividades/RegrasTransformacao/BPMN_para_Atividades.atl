@@ -113,6 +113,7 @@ rule TaskBPMN2AtividadeEstruturadaUML {
 		)
 }
 
+-- Gateways
 -- Gateway exclusivo
 rule ExclusiveGatewayBPMN2DecisionNodeUML {
 	from
@@ -123,8 +124,65 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 		AtividadeEstruturadaUML: MetaModeloUML!DecisionNode (
 			name <- 'ExclusiveGateway ID:' + ExclusiveGatewayBPMN.iD,
 			inPartition <- ExclusiveGatewayBPMN.lanes
+
 		)
 }
+
+-- Gateway inclusive
+rule InclusiveGatewayBPMN2ForkNodeUML {
+	from
+		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
+			InclusiveGatewayBPMN.activityType = #GatewayDataBasedInclusive and
+			InclusiveGatewayBPMN.outgoingEdges.first() <> InclusiveGatewayBPMN.outgoingEdges.last()			
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!ForkNode (
+			name <- InclusiveGatewayBPMN.iD
+		)
+}
+
+
+-- Gateway inclusive
+rule InclusiveGatewayBPMN2JoinNodeUML {
+	from
+		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
+			InclusiveGatewayBPMN.activityType = #GatewayDataBasedInclusive and
+			InclusiveGatewayBPMN.incomingEdges.first() <> InclusiveGatewayBPMN.incomingEdges.last()
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!JoinNode (
+			name <- InclusiveGatewayBPMN.iD
+		)
+}
+
+
+-- Gateway paralelo
+rule ParallelGatewayBPMN2ForkNodeUML {
+	from
+		ParallelGatewayBPMN: MetaModeloBPMN!Activity (
+			ParallelGatewayBPMN.activityType = #GatewayParallel and
+			ParallelGatewayBPMN.outgoingEdges.first() <> ParallelGatewayBPMN.outgoingEdges.last()			
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!ForkNode (
+			name <- ParallelGatewayBPMN.iD
+		)
+}
+
+rule ParallelGatewayBPMN2JoinNodeUML {
+	from
+		ParallelGatewayBPMN: MetaModeloBPMN!Activity (
+			ParallelGatewayBPMN.activityType = #GatewayParallel and
+			ParallelGatewayBPMN.incomingEdges.first() <> ParallelGatewayBPMN.incomingEdges.last()			
+		)
+	to
+		AtividadeEstruturadaUML: MetaModeloUML!JoinNode (
+			name <- ParallelGatewayBPMN.iD
+		)
+}
+
+
+
 
 -- Subprocesso
 rule SubProcessBPMN2ExpansionRegionUML {
@@ -199,12 +257,11 @@ rule SequenceEdgeBPM2ControlFlowUML {
 rule SequenceEdgeBPM2ControlFlowUMLNames {
 	from
 		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge (
-			not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.
-					isTargetNameNull()
+			not SequenceEdgeBPM.isSourceNameNull() and not SequenceEdgeBPM.isTargetNameNull()
 		)
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- SequenceEdgeBPM.source.name + '->' + SequenceEdgeBPM.target.name,
+			name <- SequenceEdgeBPM.source.iD + '->' + SequenceEdgeBPM.target.iD,
 			source <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
 					| activityNode.name = SequenceEdgeBPM.source.name),
 			target <- MetaModeloUML!ActivityNode -> allInstances() -> select(activityNode
