@@ -73,7 +73,7 @@ rule InicioBPMN2InicioUML {
 		AtividadeInicioUML: MetaModeloUML!InitialNode (
 			name <- AtividadeInicioBPMN.name,
 			inPartition <- AtividadeInicioBPMN.lanes.union(AtividadeInicioBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(AtividadeInicioBPMN.groups),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges
 		)
@@ -88,7 +88,7 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
 			name <- AtividadeInicioBPMN.name,
 			inPartition <- AtividadeInicioBPMN.lanes.union(AtividadeInicioBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(AtividadeInicioBPMN.groups),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges
 		)
@@ -104,7 +104,7 @@ rule FimBPMN2FimUML {
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
 			name <- AtividadeFimBPMN.name,
 			inPartition <- AtividadeFimBPMN.lanes.union(AtividadeFimBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(AtividadeFimBPMN.groups),
 			incoming <- AtividadeFimBPMN.incomingEdges,
 			outgoing <- AtividadeFimBPMN.outgoingEdges
 		)
@@ -119,7 +119,7 @@ rule TaskBPMN2OpaqueAction {
 		OpaqueAction: MetaModeloUML!OpaqueAction (
 			name <- TaskBPMN.name,
 			inPartition <- TaskBPMN.lanes.union(TaskBPMN.lanes -> collect(lane | lane.
-					pool)),
+					pool)).union(TaskBPMN.groups),
 			outgoing <- TaskBPMN.outgoingEdges,
 			incoming <- TaskBPMN.incomingEdges
 		)
@@ -142,7 +142,7 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 					'ID:' + ExclusiveGatewayBPMN.iD.toString()
 					endif,
 			inPartition <- ExclusiveGatewayBPMN.lanes.union(ExclusiveGatewayBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(ExclusiveGatewayBPMN.groups),
 			incoming <- ExclusiveGatewayBPMN.incomingEdges,
 			outgoing <- ExclusiveGatewayBPMN.outgoingEdges
 		)
@@ -167,7 +167,7 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 					endif,
 			--name <- 'ID: ' + InclusiveGatewayBPMN.iD,
 			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(InclusiveGatewayBPMN.groups),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
 			outgoing <- InclusiveGatewayBPMN.outgoingEdges
 		)
@@ -183,15 +183,13 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 		)
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
-			name <- if
-					InclusiveGatewayBPMN.name <> OclUndefined
-					then
+			name <- if InclusiveGatewayBPMN.name <> OclUndefined then
 					InclusiveGatewayBPMN.name.toString()
-					else
+				else
 					'ID:' + InclusiveGatewayBPMN.iD.toString()
-					endif,
+				endif,
 			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(InclusiveGatewayBPMN.groups),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
 			outgoing <- InclusiveGatewayBPMN.outgoingEdges
 		)
@@ -206,15 +204,13 @@ rule ParallelGatewayBPMN2ForkNodeUML {
 		)
 	to
 		ForkNodeUML: MetaModeloUML!ForkNode (
-			name <- if
-					ParallelGatewayBPMN.name <> OclUndefined
-					then
+			name <- if ParallelGatewayBPMN.name <> OclUndefined then
 					ParallelGatewayBPMN.name.toString()
-					else
+				else
 					'ID:' + ParallelGatewayBPMN.iD.toString()
-					endif,
+				endif,
 			inPartition <- ParallelGatewayBPMN.lanes.union(ParallelGatewayBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(ParallelGatewayBPMN.groups),
 			incoming <- ParallelGatewayBPMN.incomingEdges,
 			outgoing <- ParallelGatewayBPMN.outgoingEdges
 		)
@@ -228,15 +224,13 @@ rule ParallelGatewayBPMN2JoinNodeUML {
 		)
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
-			name <- if
-					ParallelGatewayBPMN.name <> OclUndefined
-					then
+			name <- if ParallelGatewayBPMN.name <> OclUndefined then
 					ParallelGatewayBPMN.name.toString()
-					else
+				else
 					'ID:' + ParallelGatewayBPMN.iD.toString()
-					endif,
+				endif,
 			inPartition <- ParallelGatewayBPMN.lanes.union(ParallelGatewayBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(ParallelGatewayBPMN.groups),
 			incoming <- ParallelGatewayBPMN.incomingEdges,
 			outgoing <- ParallelGatewayBPMN.outgoingEdges
 		)
@@ -252,7 +246,7 @@ rule SubProcessBPMN2ExpansionRegionUML {
 		ExpansionRegionUML: MetaModeloUML!ExpansionRegion (
 			name <- SubProcessBPMN.name,
 			inPartition <- SubProcessBPMN.lanes.union(SubProcessBPMN.lanes ->
-					collect(lane | lane.pool)),
+					collect(lane | lane.pool)).union(SubProcessBPMN.groups),
 			incoming <- SubProcessBPMN.incomingEdges,
 			outgoing <- SubProcessBPMN.outgoingEdges
 		)
@@ -305,16 +299,19 @@ rule SequenceEdgeBPM2ControlFlowUML {
 		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- if SequenceEdgeBPM.source.name.toString().size() = 0 then
+			name <- if SequenceEdgeBPM.source.name.toString().size() = 0 or
+					SequenceEdgeBPM.source.name = OclUndefined then
 					'ID: ' + SequenceEdgeBPM.source.iD + '->' + if SequenceEdgeBPM.target.
-							name.toString().size() = 0 then
+							name.toString().size() = 0 or SequenceEdgeBPM.target.name =
+							OclUndefined then
 						'ID: ' + SequenceEdgeBPM.target.iD.toString()
 					else
 						SequenceEdgeBPM.target.name.toString()
 					endif
 				else
 					SequenceEdgeBPM.source.name.toString() + '->' + if SequenceEdgeBPM.
-							target.name.toString().size() = 0 then
+							target.name.toString().size() = 0 or SequenceEdgeBPM.target.
+							name = OclUndefined then
 						'ID: ' + SequenceEdgeBPM.target.iD.toString()
 					else
 						SequenceEdgeBPM.target.name.toString()
@@ -351,16 +348,19 @@ rule MessagingEdgeBPMN2ControlFlowUML {
 		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge
 	to
 		ControlFlowUML: MetaModeloUML!ControlFlow (
-			name <- if MessagingEdgeBPMN.source.name.toString().size() = 0 then
+			name <- if MessagingEdgeBPMN.source.name.toString().size() = 0 or
+					MessagingEdgeBPMN.source.name = OclUndefined then
 					'ID: ' + MessagingEdgeBPMN.source.iD + '->' + if MessagingEdgeBPMN.
-							target.name.toString().size() = 0 then
+							target.name.toString().size() = 0 or MessagingEdgeBPMN.target.
+							name = OclUndefined then
 						'ID: ' + MessagingEdgeBPMN.target.iD
 					else
 						MessagingEdgeBPMN.target.name
 					endif
 				else
 					MessagingEdgeBPMN.source.name.toString() + '->' + if
-							MessagingEdgeBPMN.target.name.toString().size() = 0 then
+							MessagingEdgeBPMN.target.name.toString().size() = 0 or
+							MessagingEdgeBPMN.target.name = OclUndefined then
 						'ID: ' + MessagingEdgeBPMN.target.iD
 					else
 						MessagingEdgeBPMN.target.name
