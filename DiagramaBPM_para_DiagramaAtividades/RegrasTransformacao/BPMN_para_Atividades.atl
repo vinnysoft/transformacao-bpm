@@ -121,6 +121,7 @@ rule TaskBPMN2OpaqueAction {
 		)
 }
 
+
 -- Gateways
 -- Gateway exclusivo
 rule ExclusiveGatewayBPMN2DecisionNodeUML {
@@ -305,11 +306,14 @@ rule LaneBPM2PartitionUML {
 		)
 }
 
-rule MessagingEdgeBPM2SendControlFlowUML {
+--Rule para mapear as mensagens BPMN como Control Flow UML
+rule MessagingEdgeBPM2ControlFlowUML {
 	from
 		MessagingEdgeBPM: MetaModeloBPMN!MessagingEdge
 	to
-		SendSignalUML: MetaModeloUML!SendSignalEvent (
-			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name
+		ControlFlowUML: MetaModeloUML!ControlFlow (
+			name <- MessagingEdgeBPM.source.name + '->' + MessagingEdgeBPM.target.name,
+			source <- MessagingEdgeBPM.source,
+			target <- MessagingEdgeBPM.target
 		)
 }
