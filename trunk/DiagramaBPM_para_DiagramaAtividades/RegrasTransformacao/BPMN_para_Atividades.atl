@@ -157,14 +157,15 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 					outgoingEdges.last()
 		)
 	to
-		AtividadeEstruturadaUML: MetaModeloUML!ForkNode (
+		ForkNodeUML: MetaModeloUML!ForkNode (
 			name <- if
-					InclusiveGatewayBPMN.name.toString().size() > 0
+					InclusiveGatewayBPMN.name <> OclUndefined
 					then
-					InclusiveGatewayBPMN.name.toString()
+					InclusiveGatewayBPMN.name
 					else
-					'ID:' + InclusiveGatewayBPMN.iD.toString()
+					'ID:' + InclusiveGatewayBPMN.iD
 					endif,
+			--name <- 'ID: ' + InclusiveGatewayBPMN.iD,
 			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes ->
 					collect(lane | lane.pool)),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
@@ -183,7 +184,7 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
 			name <- if
-					InclusiveGatewayBPMN.name.toString().size() > 0
+					InclusiveGatewayBPMN.name <> OclUndefined
 					then
 					InclusiveGatewayBPMN.name.toString()
 					else
@@ -206,7 +207,7 @@ rule ParallelGatewayBPMN2ForkNodeUML {
 	to
 		ForkNodeUML: MetaModeloUML!ForkNode (
 			name <- if
-					ParallelGatewayBPMN.name.toString().size() > 0
+					ParallelGatewayBPMN.name <> OclUndefined
 					then
 					ParallelGatewayBPMN.name.toString()
 					else
@@ -228,7 +229,7 @@ rule ParallelGatewayBPMN2JoinNodeUML {
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
 			name <- if
-					ParallelGatewayBPMN.name.toString().size() > 0
+					ParallelGatewayBPMN.name <> OclUndefined
 					then
 					ParallelGatewayBPMN.name.toString()
 					else
@@ -304,24 +305,23 @@ rule SequenceEdgeBPM2ControlFlowUML {
 		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- if
-					SequenceEdgeBPM.source.name.toString().size() = 0 
-					then
-						'ID: ' + SequenceEdgeBPM.source.iD + '->' +
-						if SequenceEdgeBPM.target.name.toString().size() = 0
-						then 'ID: ' + SequenceEdgeBPM.target.iD.toString()
-						else SequenceEdgeBPM.target.name.toString()
-						endif
+			name <- if SequenceEdgeBPM.source.name.toString().size() = 0 then
+					'ID: ' + SequenceEdgeBPM.source.iD + '->' + if SequenceEdgeBPM.target.
+							name.toString().size() = 0 then
+						'ID: ' + SequenceEdgeBPM.target.iD.toString()
 					else
-						SequenceEdgeBPM.source.name.toString() + '->' +
-						if SequenceEdgeBPM.target.name.toString().size() = 0
-						then 'ID: ' + SequenceEdgeBPM.target.iD.toString()
-						else SequenceEdgeBPM.target.name.toString()
-						endif
+						SequenceEdgeBPM.target.name.toString()
 					endif
+				else
+					SequenceEdgeBPM.source.name.toString() + '->' + if SequenceEdgeBPM.
+							target.name.toString().size() = 0 then
+						'ID: ' + SequenceEdgeBPM.target.iD.toString()
+					else
+						SequenceEdgeBPM.target.name.toString()
+					endif
+				endif
 		)
 }
-
 
 --Rule para mapear os PoolsBPMN em ActivityPartitions
 rule PoolBPM2PartitionUML {
@@ -351,21 +351,21 @@ rule MessagingEdgeBPMN2ControlFlowUML {
 		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge
 	to
 		ControlFlowUML: MetaModeloUML!ControlFlow (
-			name <- if
-					MessagingEdgeBPMN.source.name.toString().size() = 0 
-					then
-					'ID: ' + MessagingEdgeBPMN.source.iD + '->' +
-						if MessagingEdgeBPMN.target.name.toString().size() = 0
-						then 'ID: ' + MessagingEdgeBPMN.target.iD
-						else MessagingEdgeBPMN.target.name
-						endif
+			name <- if MessagingEdgeBPMN.source.name.toString().size() = 0 then
+					'ID: ' + MessagingEdgeBPMN.source.iD + '->' + if MessagingEdgeBPMN.
+							target.name.toString().size() = 0 then
+						'ID: ' + MessagingEdgeBPMN.target.iD
 					else
-						MessagingEdgeBPMN.source.name.toString() + '->' +
-						if MessagingEdgeBPMN.target.name.toString().size() = 0
-						then 'ID: ' + MessagingEdgeBPMN.target.iD
-						else MessagingEdgeBPMN.target.name
-						endif
-					endif,
+						MessagingEdgeBPMN.target.name
+					endif
+				else
+					MessagingEdgeBPMN.source.name.toString() + '->' + if
+							MessagingEdgeBPMN.target.name.toString().size() = 0 then
+						'ID: ' + MessagingEdgeBPMN.target.iD
+					else
+						MessagingEdgeBPMN.target.name
+					endif
+				endif,
 			source <- MessagingEdgeBPMN.source,
 			target <- MessagingEdgeBPMN.target
 		)
