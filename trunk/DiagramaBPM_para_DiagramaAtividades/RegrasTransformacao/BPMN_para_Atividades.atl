@@ -96,12 +96,16 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 			AtividadeInicioBPMN.isInitialTimerNode()
 		)
 	to
-		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
+		ComentarioUML: MetaModeloUML!Comment (
+			body <- AtividadeInicioBPMN.documentation
+			),
+		AtividadeInicioUML: MetaModeloUML!InitialNode (
 			name <- AtividadeInicioBPMN.name,
 			inPartition <- AtividadeInicioBPMN.lanes.union(AtividadeInicioBPMN.lanes ->
 					collect(lane | lane.pool)).union(AtividadeInicioBPMN.groups),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
-			outgoing <- AtividadeInicioBPMN.outgoingEdges
+			outgoing <- AtividadeInicioBPMN.outgoingEdges,
+			ownedComment <- ComentarioUML --AtividadeInicioBPMN.documentation --'Frequencia/realizado em: '
 		)
 }
 
@@ -112,23 +116,24 @@ rule EventStartMessageBPMN2AcceptEventUML {
 			StartMessageBPMN.isInitialMessageNode()
 		)
 	to
-		InitialNodeUML: MetaModeloUML!InitialNode (
+		AcceptEventActionUML: MetaModeloUML!AcceptEventAction (
 			name <- StartMessageBPMN.name,
 			inPartition <- StartMessageBPMN.lanes.union(StartMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(StartMessageBPMN.groups),
-			incoming <- StartMessageBPMN.incomingEdges
-		--	outgoing <- StartMessageBPMN.outgoingEdges
-					),
-		AcceptUML: MetaModeloUML!AcceptEventAction (
-			name <- StartMessageBPMN.name,
-			inPartition <- StartMessageBPMN.lanes.union(StartMessageBPMN.lanes ->
-					collect(lane | lane.pool)).union(StartMessageBPMN.groups),
-			--incoming <- AcceptUML.setValue(stereotype, propertyname, newvalue),
+			incoming <- StartMessageBPMN.incomingEdges,
 			outgoing <- StartMessageBPMN.outgoingEdges
-		)
-		
+			
+		)		
 				
 }
+
+
+-- eventos intermediarios
+
+
+
+
+
 
 -- rules para eventos de fim
 rule FimBPMN2FimUML {
@@ -149,7 +154,7 @@ rule FimBPMN2FimUML {
 rule TaskBPMN2OpaqueAction {
 	from
 		TaskBPMN: MetaModeloBPMN!Activity (
-			TaskBPMN.activityType = #Task
+			TaskBPMN.activityType = #Task and not TaskBPMN.looping
 		)
 	to
 		OpaqueAction: MetaModeloUML!OpaqueAction (
@@ -159,6 +164,20 @@ rule TaskBPMN2OpaqueAction {
 			outgoing <- TaskBPMN.outgoingEdges,
 			incoming <- TaskBPMN.incomingEdges
 		)
+}
+
+rule LoopBPMN2LoopUML {
+	from
+		LoopBPMN: MetaModeloBPMN!Activity (
+			LoopBPMN.activityType = #Task and LoopBPMN.looping
+		)
+	to
+		LoopUML: MetaModeloUML!LoopNode (
+			name <- LoopBPMN.name,
+			inPartition <- LoopBPMN.lanes.union(LoopBPMN.lanes -> collect(lane | lane.
+					pool)).union(LoopBPMN.groups),
+			outgoing <- LoopBPMN.outgoingEdges,
+			incoming <- LoopBPMN.incomingEdges)
 }
 
 -- Gateways
