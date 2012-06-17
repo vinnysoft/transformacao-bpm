@@ -8,7 +8,7 @@ create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
 --Helper para verificar se a atividade é uma atividade inicial.
 helper context MetaModeloBPMN!Activity def: isInitialNode(): Boolean =
 	if self.activityType.toString().startsWith('EventStart') and self.activityType <>
-			#EventStartTimer then
+			#EventStartTimer and self.activityType <> #EventStartMessage then
 		true
 	else
 		false
@@ -21,6 +21,16 @@ helper context MetaModeloBPMN!Activity def: isInitialTimerNode(): Boolean =
 	else
 		false
 	endif;
+
+
+--Helper para verificar se a atividade é um EventStartTimer.
+helper context MetaModeloBPMN!Activity def: isInitialMessageNode(): Boolean =
+	if self.activityType = #EventStartMessage then
+		true
+	else
+		false
+	endif;
+
 
 --Helper para verificar se a atividade é uma atividade final.
 helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
@@ -79,6 +89,7 @@ rule InicioBPMN2InicioUML {
 		)
 }
 
+-- rule para event start timer 
 rule EventStartTimerBPMN2AcceptEventActionUML {
 	from
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
@@ -92,6 +103,31 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges
 		)
+}
+
+-- rule para event start message 
+rule EventStartMessageBPMN2AcceptEventUML {
+	from
+		StartMessageBPMN: MetaModeloBPMN!Activity (
+			StartMessageBPMN.isInitialMessageNode()
+		)
+	to
+		InitialNodeUML: MetaModeloUML!InitialNode (
+			name <- StartMessageBPMN.name,
+			inPartition <- StartMessageBPMN.lanes.union(StartMessageBPMN.lanes ->
+					collect(lane | lane.pool)).union(StartMessageBPMN.groups),
+			incoming <- StartMessageBPMN.incomingEdges
+		--	outgoing <- StartMessageBPMN.outgoingEdges
+					),
+		AcceptUML: MetaModeloUML!AcceptEventAction (
+			name <- StartMessageBPMN.name,
+			inPartition <- StartMessageBPMN.lanes.union(StartMessageBPMN.lanes ->
+					collect(lane | lane.pool)).union(StartMessageBPMN.groups),
+			--incoming <- AcceptUML.setValue(stereotype, propertyname, newvalue),
+			outgoing <- StartMessageBPMN.outgoingEdges
+		)
+		
+				
 }
 
 -- rules para eventos de fim
@@ -130,7 +166,9 @@ rule TaskBPMN2OpaqueAction {
 rule ExclusiveGatewayBPMN2DecisionNodeUML {
 	from
 		ExclusiveGatewayBPMN: MetaModeloBPMN!Activity (
-			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive
+			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive and 
+			ExclusiveGatewayBPMN.outgoingEdges.first() <> ExclusiveGatewayBPMN.
+					outgoingEdges.last()
 		)
 	to
 		DecisionNodeUML: MetaModeloUML!DecisionNode (
@@ -147,6 +185,31 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 			outgoing <- ExclusiveGatewayBPMN.outgoingEdges
 		)
 }
+
+-- Gateway exclusivo
+rule ExclusiveGatewayBPMN2MergeNodeUML {
+	from
+		ExclusiveGatewayBPMN: MetaModeloBPMN!Activity (
+			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive and 
+			ExclusiveGatewayBPMN.incomingEdges.first() <> ExclusiveGatewayBPMN.
+					incomingEdges.last()
+		)
+	to
+		MergeNodeUML: MetaModeloUML!MergeNode (
+			name <- if
+					ExclusiveGatewayBPMN.name.toString().size() > 0
+					then
+					ExclusiveGatewayBPMN.name
+					else
+					'ID:' + ExclusiveGatewayBPMN.iD.toString()
+					endif,
+			inPartition <- ExclusiveGatewayBPMN.lanes.union(ExclusiveGatewayBPMN.lanes ->
+					collect(lane | lane.pool)).union(ExclusiveGatewayBPMN.groups),
+			incoming <- ExclusiveGatewayBPMN.incomingEdges,
+			outgoing <- ExclusiveGatewayBPMN.outgoingEdges
+		)
+}
+
 
 -- Gateway inclusive
 rule InclusiveGatewayBPMN2ForkNodeUML {
@@ -173,7 +236,7 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 		)
 }
 
--- Gateway inclusive
+-- Gateway inclusive 
 rule InclusiveGatewayBPMN2JoinNodeUML {
 	from
 		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
@@ -253,13 +316,14 @@ rule SubProcessBPMN2ExpansionRegionUML {
 }
 
 -- Rule Data Object para Artefato
-rule DataObjectBPMN2ObjectNodeUML {
+rule DataObjectBPMN2DataStoreUML {
 	from
 		DataObjectBPMN: MetaModeloBPMN!DataObject
 	to
 		--ObjetoUML: MetaModeloUML!ObjectNode (
-		ArtefatoUML: MetaModeloUML!Artifact (
-			name <- DataObjectBPMN.name
+		DataStoreUML: MetaModeloUML!DataStoreNode (
+			name <- DataObjectBPMN.name,
+			incoming <- DataObjectBPMN.associations
 		)
 }
 
@@ -301,22 +365,24 @@ rule SequenceEdgeBPM2ControlFlowUML {
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
 			name <- if SequenceEdgeBPM.source.name.toString().size() = 0 or
 					SequenceEdgeBPM.source.name = OclUndefined then
-					'ID: ' + SequenceEdgeBPM.source.iD + '->' + if SequenceEdgeBPM.target.
-							name.toString().size() = 0 or SequenceEdgeBPM.target.name =
-							OclUndefined then
-						'ID: ' + SequenceEdgeBPM.target.iD.toString()
+					'ID: ' + SequenceEdgeBPM.source.iD + '->' + 
+						if SequenceEdgeBPM.target.
+								name.toString().size() = 0 or SequenceEdgeBPM.target.name =
+								OclUndefined then
+							'ID: ' + SequenceEdgeBPM.target.iD.toString()
+						else
+							SequenceEdgeBPM.target.name.toString()
+						endif
 					else
-						SequenceEdgeBPM.target.name.toString()
+						SequenceEdgeBPM.source.name.toString() + '->' + 
+							if SequenceEdgeBPM.
+								target.name.toString().size() = 0 or SequenceEdgeBPM.target.
+								name = OclUndefined then
+							'ID: ' + SequenceEdgeBPM.target.iD.toString()
+							else
+								SequenceEdgeBPM.target.name.toString()
+							endif
 					endif
-				else
-					SequenceEdgeBPM.source.name.toString() + '->' + if SequenceEdgeBPM.
-							target.name.toString().size() = 0 or SequenceEdgeBPM.target.
-							name = OclUndefined then
-						'ID: ' + SequenceEdgeBPM.target.iD.toString()
-					else
-						SequenceEdgeBPM.target.name.toString()
-					endif
-				endif
 		)
 }
 
@@ -370,3 +436,6 @@ rule MessagingEdgeBPMN2ControlFlowUML {
 			target <- MessagingEdgeBPMN.target
 		)
 }
+
+
+
