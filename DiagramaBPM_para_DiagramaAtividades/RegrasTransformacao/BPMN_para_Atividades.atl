@@ -129,7 +129,23 @@ rule EventStartMessageBPMN2AcceptEventUML {
 
 
 -- eventos intermediarios
-
+-- rule para event intermediate message 
+rule EventIntermediateMessageBPMN2MensagemUML {
+	from
+		IntermediateMessageBPMN: MetaModeloBPMN!Activity (
+			IntermediateMessageBPMN.activityType = #EventIntermediateMessage
+		)
+	to
+		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
+			name <- 'Evento de mensagem: ' + IntermediateMessageBPMN.name,
+			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
+					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
+			incoming <- IntermediateMessageBPMN.incomingEdges,
+			outgoing <- IntermediateMessageBPMN.outgoingEdges
+			
+		)		
+				
+}
 
 
 
@@ -151,6 +167,8 @@ rule FimBPMN2FimUML {
 		)
 }
 
+
+-- Tasks
 rule TaskBPMN2OpaqueAction {
 	from
 		TaskBPMN: MetaModeloBPMN!Activity (
