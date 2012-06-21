@@ -5,7 +5,9 @@
 module BPMNparaAtividades;
 create ModeloSaida: MetaModeloUML from ModeloEntrada: MetaModeloBPMN;
 
---Helper para verificar se a atividade é uma atividade inicial.
+
+-- Helpers
+--Helper para verificar se a atividade é inicial.
 helper context MetaModeloBPMN!Activity def: isInitialNode(): Boolean =
 	if self.activityType.toString().startsWith('EventStart') and self.activityType <>
 			#EventStartTimer and self.activityType <> #EventStartMessage then
@@ -23,7 +25,7 @@ helper context MetaModeloBPMN!Activity def: isInitialTimerNode(): Boolean =
 	endif;
 
 
---Helper para verificar se a atividade é um EventStartTimer.
+--Helper para verificar se a atividade é um EventStartMessage.
 helper context MetaModeloBPMN!Activity def: isInitialMessageNode(): Boolean =
 	if self.activityType = #EventStartMessage then
 		true
@@ -32,9 +34,35 @@ helper context MetaModeloBPMN!Activity def: isInitialMessageNode(): Boolean =
 	endif;
 
 
---Helper para verificar se a atividade é uma atividade final.
+--Helper para verificar se a atividade é intermediária
+helper context MetaModeloBPMN!Activity def: isEventIntermediate(): Boolean =
+	if 	self.activityType = #EventIntermediateMessage then
+		true
+	else
+		false
+	endif;
+
+--Helper para verificar se a atividade é final.
 helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
-	if self.activityType.toString().startsWith('EventEnd') then
+	if self.activityType.toString().startsWith('EventEnd')  
+		and self.activityType <> #EventEndMessage 
+		and self.activityType <> #EventEndTerminate then
+		true
+	else
+		false
+	endif;
+
+--Helper para verificar se a atividade é EventEndMessage
+helper context MetaModeloBPMN!Activity def: isFinalMessage(): Boolean =
+	if 	self.activityType = #EventEndMessage then
+		true
+	else
+		false
+	endif;
+
+--Helper para verificar se a atividade é um Event End Terminate.
+helper context MetaModeloBPMN!Activity def: isEventTerminate(): Boolean =
+	if 	self.activityType = #EventEndTerminate then
 		true
 	else
 		false
@@ -55,6 +83,9 @@ helper context MetaModeloBPMN!SequenceEdge def: isTargetNameNull(): Boolean =
 	else
 		false
 	endif;
+
+
+--Rules
 
 --Rule para criar uma atividade e modelo UML por cada diagrama BPMN.
 rule DiagramaBPMN2ModeloUML {
@@ -105,7 +136,7 @@ rule EventStartTimerBPMN2AcceptEventActionUML {
 					collect(lane | lane.pool)).union(AtividadeInicioBPMN.groups),
 			incoming <- AtividadeInicioBPMN.incomingEdges,
 			outgoing <- AtividadeInicioBPMN.outgoingEdges,
-			ownedComment <- ComentarioUML --AtividadeInicioBPMN.documentation --'Frequencia/realizado em: '
+			ownedComment <- ComentarioUML 
 		)
 }
 
@@ -133,32 +164,72 @@ rule EventStartMessageBPMN2AcceptEventUML {
 rule EventIntermediateMessageBPMN2MensagemUML {
 	from
 		IntermediateMessageBPMN: MetaModeloBPMN!Activity (
-			IntermediateMessageBPMN.activityType = #EventIntermediateMessage
+			IntermediateMessageBPMN.isEventIntermediate()
 		)
 	to
+		ComentarioUML: MetaModeloUML!Comment (
+			body <- IntermediateMessageBPMN.documentation
+			),
 		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
 			name <- 'Evento de mensagem: ' + IntermediateMessageBPMN.name,
 			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
 			incoming <- IntermediateMessageBPMN.incomingEdges,
-			outgoing <- IntermediateMessageBPMN.outgoingEdges
-			
+			outgoing <- IntermediateMessageBPMN.outgoingEdges,
+			ownedComment <- ComentarioUML
 		)		
 				
 }
 
 
 
-
-
--- rules para eventos de fim
-rule FimBPMN2FimUML {
+--eventos de fim
+-- rule para eventos terminate
+rule TerminateBPMN2FimUML {
 	from
-		AtividadeFimBPMN: MetaModeloBPMN!Activity (
-			AtividadeFimBPMN.activityType.toString().startsWith('EventEnd')
+		TerminateBPMN: MetaModeloBPMN!Activity (
+			TerminateBPMN.isEventTerminate()
 		)
 	to
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
+			name <- TerminateBPMN.name,
+			inPartition <- TerminateBPMN.lanes.union(TerminateBPMN.lanes ->
+					collect(lane | lane.pool)).union(TerminateBPMN.groups),
+			incoming <- TerminateBPMN.incomingEdges,
+			outgoing <- TerminateBPMN.outgoingEdges
+		)
+}
+
+-- rules para eventos de fim com mensagem
+rule MensagemFimBPMN2FimUML {
+	from
+		MensagemFimBPMN: MetaModeloBPMN!Activity (
+			MensagemFimBPMN.isFinalMessage()
+		)
+	to
+		MensagemFimUML: MetaModeloUML!SendSignalAction (
+			name <- MensagemFimBPMN.name,
+			inPartition <- MensagemFimBPMN.lanes.union(MensagemFimBPMN.lanes ->
+					collect(lane | lane.pool)).union(MensagemFimBPMN.groups),
+			incoming <- MensagemFimBPMN.incomingEdges		
+			),
+		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
+			name <- MensagemFimBPMN.name,
+			inPartition <- MensagemFimBPMN.lanes.union(MensagemFimBPMN.lanes ->
+					collect(lane | lane.pool)).union(MensagemFimBPMN.groups),
+			incoming <- MensagemFimBPMN.incomingEdges
+		)
+}
+
+
+-- rules para none event ends e os demais eventos de fim ainda não tratados
+rule FimBPMN2FimUML {
+	from
+		AtividadeFimBPMN: MetaModeloBPMN!Activity (
+			AtividadeFimBPMN.isFinalNode()
+		)
+	to
+		AtividadeFimUML: MetaModeloUML!FlowFinalNode (
 			name <- AtividadeFimBPMN.name,
 			inPartition <- AtividadeFimBPMN.lanes.union(AtividadeFimBPMN.lanes ->
 					collect(lane | lane.pool)).union(AtividadeFimBPMN.groups),
@@ -257,7 +328,10 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 					outgoingEdges.last()
 		)
 	to
-		ForkNodeUML: MetaModeloUML!ForkNode (
+		StringExpressionUML: MetaModeloUML!StringExpression (			
+			name <- '<Inclusive Gateway>'
+			),
+		InclusiveUML: MetaModeloUML!OpaqueAction (
 			name <- if
 					InclusiveGatewayBPMN.name <> OclUndefined
 					then
@@ -265,11 +339,12 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 					else
 					'ID:' + InclusiveGatewayBPMN.iD
 					endif,
-			--name <- 'ID: ' + InclusiveGatewayBPMN.iD,
 			inPartition <- InclusiveGatewayBPMN.lanes.union(InclusiveGatewayBPMN.lanes ->
 					collect(lane | lane.pool)).union(InclusiveGatewayBPMN.groups),
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
-			outgoing <- InclusiveGatewayBPMN.outgoingEdges
+			nameExpression <- StringExpressionUML  
+			
+			
 		)
 }
 
@@ -395,42 +470,42 @@ rule GroupBPMN2ActivityGroupUML {
 }
 
 -- rules para transformação das sequence edge BPMN em control flow UML
-rule SequenceEdgeBPM2ControlFlowUML {
+rule SequenceEdgeBPMN2ControlFlowUML {
 	from
-		SequenceEdgeBPM: MetaModeloBPMN!SequenceEdge
+		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- if SequenceEdgeBPM.source.name.toString().size() = 0 or
-					SequenceEdgeBPM.source.name = OclUndefined then
-					'ID: ' + SequenceEdgeBPM.source.iD + '->' + 
-						if SequenceEdgeBPM.target.
-								name.toString().size() = 0 or SequenceEdgeBPM.target.name =
+			name <- if SequenceEdgeBPMN.source.name.toString().size() = 0 or
+					SequenceEdgeBPMN.source.name = OclUndefined then
+					'ID: ' + SequenceEdgeBPMN.source.iD + '->' + 
+						if SequenceEdgeBPMN.target.
+								name.toString().size() = 0 or SequenceEdgeBPMN.target.name =
 								OclUndefined then
-							'ID: ' + SequenceEdgeBPM.target.iD.toString()
+							'ID: ' + SequenceEdgeBPMN.target.iD.toString()
 						else
-							SequenceEdgeBPM.target.name.toString()
+							SequenceEdgeBPMN.target.name.toString()
 						endif
 					else
-						SequenceEdgeBPM.source.name.toString() + '->' + 
-							if SequenceEdgeBPM.
-								target.name.toString().size() = 0 or SequenceEdgeBPM.target.
+						SequenceEdgeBPMN.source.name.toString() + '->' + 
+							if SequenceEdgeBPMN.
+								target.name.toString().size() = 0 or SequenceEdgeBPMN.target.
 								name = OclUndefined then
-							'ID: ' + SequenceEdgeBPM.target.iD.toString()
+							'ID: ' + SequenceEdgeBPMN.target.iD.toString()
 							else
-								SequenceEdgeBPM.target.name.toString()
+								SequenceEdgeBPMN.target.name.toString()
 							endif
 					endif
 		)
 }
 
 --Rule para mapear os PoolsBPMN em ActivityPartitions
-rule PoolBPM2PartitionUML {
+rule PoolBPMN2PartitionUML {
 	from
-		PoolBPM: MetaModeloBPMN!Pool
+		PoolBPMN: MetaModeloBPMN!Pool
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			name <- PoolBPM.name,
-			subpartition <- PoolBPM.lanes
+			name <- PoolBPMN.name,
+			subpartition <- PoolBPMN.lanes
 		)
 }
 
