@@ -34,13 +34,23 @@ helper context MetaModeloBPMN!Activity def: isInitialMessageNode(): Boolean =
 	endif;
 
 
---Helper para verificar se a atividade é intermediária
-helper context MetaModeloBPMN!Activity def: isEventIntermediate(): Boolean =
+--Helper para verificar se a atividade é Event Intermediate Message
+helper context MetaModeloBPMN!Activity def: isEventIntermediateMessage(): Boolean =
 	if 	self.activityType = #EventIntermediateMessage then
 		true
 	else
 		false
 	endif;
+
+--Helper para verificar se a atividade é intermediária
+helper context MetaModeloBPMN!Activity def: isEventIntermediate(): Boolean =
+	if 	self.activityType.toString().startsWith('EventIntermediate') and 
+		self.activityType <> #EventIntermediateMessage then
+		true
+	else
+		false
+	endif;
+
 
 --Helper para verificar se a atividade é final.
 helper context MetaModeloBPMN!Activity def: isFinalNode(): Boolean =
@@ -83,6 +93,23 @@ helper context MetaModeloBPMN!SequenceEdge def: isTargetNameNull(): Boolean =
 	else
 		false
 	endif;
+
+-- Helper para identificar se há apenas um incoming edge 
+helper context MetaModeloBPMN!Activity def: isMultipleIncoming(): Boolean =
+	if self.incomingEdges.first() <> self.incomingEdges.last() then
+		true
+	else
+		false
+	endif;
+
+-- Helper para identificar se há apenas um outgoing edge 
+helper context MetaModeloBPMN!Activity def: isMultipleOutgoing(): Boolean =
+	if self.outgoingEdges.first() <> self.outgoingEdges.last() then
+		true
+	else
+		false
+	endif;
+
 
 
 --Rules
@@ -164,14 +191,14 @@ rule EventStartMessageBPMN2AcceptEventUML {
 rule EventIntermediateMessageBPMN2MensagemUML {
 	from
 		IntermediateMessageBPMN: MetaModeloBPMN!Activity (
-			IntermediateMessageBPMN.isEventIntermediate()
+			IntermediateMessageBPMN.isEventIntermediateMessage()
 		)
 	to
 		ComentarioUML: MetaModeloUML!Comment (
 			body <- IntermediateMessageBPMN.documentation
 			),
 		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
-			name <- 'Evento de mensagem: ' + IntermediateMessageBPMN.name,
+			name <- 'Evento intermediário de mensagem: ' + IntermediateMessageBPMN.name,
 			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
 			incoming <- IntermediateMessageBPMN.incomingEdges,
@@ -181,6 +208,27 @@ rule EventIntermediateMessageBPMN2MensagemUML {
 				
 }
 
+
+-- rule para event intermediate message 
+rule EventIntermediateBPMN2MensagemUML {
+	from
+		IntermediateBPMN: MetaModeloBPMN!Activity (
+			IntermediateBPMN.isEventIntermediate()
+		)
+	to
+		ComentarioUML: MetaModeloUML!Comment (
+			body <- IntermediateBPMN.documentation
+			),
+		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
+			name <- 'Evento intermediário: ' + IntermediateBPMN.name,
+			inPartition <- IntermediateBPMN.lanes.union(IntermediateBPMN.lanes ->
+					collect(lane | lane.pool)).union(IntermediateBPMN.groups),
+			incoming <- IntermediateBPMN.incomingEdges,
+			outgoing <- IntermediateBPMN.outgoingEdges,
+			ownedComment <- ComentarioUML
+		)		
+				
+}
 
 
 --eventos de fim
@@ -275,8 +323,7 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 	from
 		ExclusiveGatewayBPMN: MetaModeloBPMN!Activity (
 			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive and 
-			ExclusiveGatewayBPMN.outgoingEdges.first() <> ExclusiveGatewayBPMN.
-					outgoingEdges.last()
+			ExclusiveGatewayBPMN.isMultipleOutgoing()
 		)
 	to
 		DecisionNodeUML: MetaModeloUML!DecisionNode (
@@ -298,9 +345,8 @@ rule ExclusiveGatewayBPMN2DecisionNodeUML {
 rule ExclusiveGatewayBPMN2MergeNodeUML {
 	from
 		ExclusiveGatewayBPMN: MetaModeloBPMN!Activity (
-			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive and 
-			ExclusiveGatewayBPMN.incomingEdges.first() <> ExclusiveGatewayBPMN.
-					incomingEdges.last()
+			ExclusiveGatewayBPMN.activityType = #GatewayDataBasedExclusive and
+			ExclusiveGatewayBPMN.isMultipleIncoming()
 		)
 	to
 		MergeNodeUML: MetaModeloUML!MergeNode (
@@ -324,8 +370,7 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 	from
 		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
 			InclusiveGatewayBPMN.activityType = #GatewayDataBasedInclusive and
-					InclusiveGatewayBPMN.outgoingEdges.first() <> InclusiveGatewayBPMN.
-					outgoingEdges.last()
+					InclusiveGatewayBPMN.isMultipleOutgoing()
 		)
 	to
 		StringExpressionUML: MetaModeloUML!StringExpression (			
@@ -353,8 +398,7 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 	from
 		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
 			InclusiveGatewayBPMN.activityType = #GatewayDataBasedInclusive and
-					InclusiveGatewayBPMN.incomingEdges.first() <> InclusiveGatewayBPMN.
-					incomingEdges.last()
+					InclusiveGatewayBPMN.isMultipleIncoming()
 		)
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
@@ -374,8 +418,7 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 rule ParallelGatewayBPMN2ForkNodeUML {
 	from
 		ParallelGatewayBPMN: MetaModeloBPMN!Activity (
-			ParallelGatewayBPMN.activityType = #GatewayParallel and ParallelGatewayBPMN.
-					outgoingEdges.first() <> ParallelGatewayBPMN.outgoingEdges.last()
+			ParallelGatewayBPMN.activityType = #GatewayParallel and ParallelGatewayBPMN.isMultipleOutgoing()
 		)
 	to
 		ForkNodeUML: MetaModeloUML!ForkNode (
@@ -394,8 +437,7 @@ rule ParallelGatewayBPMN2ForkNodeUML {
 rule ParallelGatewayBPMN2JoinNodeUML {
 	from
 		ParallelGatewayBPMN: MetaModeloBPMN!Activity (
-			ParallelGatewayBPMN.activityType = #GatewayParallel and ParallelGatewayBPMN.
-					incomingEdges.first() <> ParallelGatewayBPMN.incomingEdges.last()
+			ParallelGatewayBPMN.activityType = #GatewayParallel and ParallelGatewayBPMN.isMultipleIncoming()
 		)
 	to
 		JoinNodeUML: MetaModeloUML!JoinNode (
