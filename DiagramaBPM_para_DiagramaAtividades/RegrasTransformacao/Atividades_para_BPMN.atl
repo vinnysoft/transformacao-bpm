@@ -15,6 +15,16 @@ helper context MetaModeloUML!ActivityPartition def: isLane(): Boolean =
 		false
 	endif;
 
+--Helper para verificar se a Activity Partition é lane
+helper context MetaModeloUML!OpaqueAction def: isTask(): Boolean =
+	if 
+		self.nameExpression = OclUndefined
+	then
+		true
+	else
+		false
+	endif;
+
 --Rules
 
 --Rule para criar uma atividade e modelo UML por cada diagrama BPMN.
@@ -40,7 +50,8 @@ rule PartitionUML2PoolBPMN {
 	to
 		PoolBPMN: MetaModeloBPMN!Pool (
 			name <- PartitionUML.name,
-			lanes <- PartitionUML.subpartition
+			lanes <- PartitionUML.subpartition,
+			sequenceEdges <- MetaModeloBPMN!SequenceEdge.allInstances()
 			
 			)
 }
@@ -57,9 +68,49 @@ rule PartitionUML2LaneBPMN {
 			name <- PartitionUML.name,
 			pool <- PartitionUML.superPartition
 			
+--			activities <- PartitionUML.containedNode
+			
 			
 			)
 }
+
+
+--Tasks
+rule OpaqueActionUML2TaskBPMN {
+	from
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
+			OpaqueActionUML.isTask()
+			)
+	to
+		ActivityBPMN: MetaModeloBPMN!Activity (
+			name <- OpaqueActionUML.name,
+			activityType <- 'Task'
+		)
+}
+
+
+-- Loop Task
+rule LoopUML2LoopBPMN {
+	from
+		LoopUML: MetaModeloUML!LoopNode
+	to
+		LoopBPMN: MetaModeloBPMN!Activity (
+			name <- LoopUML.name,
+			activityType <- 'Task',
+			looping <- true
+		)
+}
+
+
+-- Edges
+-- Control Flow 2 SequenceEdge
+rule ControlFlowUML2SequenceEdgeBPMN {
+	from
+		ControlFlowUML: MetaModeloUML!ControlFlow
+	to
+		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge 
+}
+
 
 -- rules para eventos de inicio
 rule InicioUML2InicioBPMN {
@@ -70,6 +121,9 @@ rule InicioUML2InicioBPMN {
 	to
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventStartEmpty'
+	--		incomingEdges <- InitialNodeUML.incoming,
+--			outgoingEdges <- InitialNodeUML.outgoing
+			
 			)
 }
 
