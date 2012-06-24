@@ -198,7 +198,7 @@ rule EventIntermediateMessageBPMN2MensagemUML {
 			body <- IntermediateMessageBPMN.documentation
 			),
 		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
-			name <- 'Evento intermediário de mensagem: ' + IntermediateMessageBPMN.name,
+			name <- 'Evento intermediário mensageiro: ' + IntermediateMessageBPMN.name,
 			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
 			incoming <- IntermediateMessageBPMN.incomingEdges,
