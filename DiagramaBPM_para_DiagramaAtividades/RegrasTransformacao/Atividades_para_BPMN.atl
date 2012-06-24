@@ -4,7 +4,16 @@
 module Atividades_para_BPMN;
 create ModeloSaida:MetaModeloBPMN  from ModeloEntrada: MetaModeloUML;
 
-
+-- Helpers
+--Helper para verificar se a Activity Partition é lane
+helper context MetaModeloUML!ActivityPartition def: isLane(): Boolean =
+	if 
+		self.superPartition <> OclUndefined
+	then
+		true
+	else
+		false
+	endif;
 
 --Rules
 
@@ -19,22 +28,35 @@ rule ModeloUML2DiagramaBPMN {
 			artifacts <- MetaModeloBPMN!Artifact.allInstances(),
 			pools <- MetaModeloBPMN!Pool.allInstances(),
 			messages <- MetaModeloBPMN!MessagingEdge.allInstances()
-			
-			--package <- ModeloUML,
-	--		node <- MetaModeloUML!ActivityNode.allInstances(),
-		--	partition <- MetaModeloUML!ActivityPartition.allInstances(),
-			--edge <- MetaModeloUML!ActivityEdge.allInstances()
 		)
 }
 
+-- rule que transforma ActivityPartition em Pool
 rule PartitionUML2PoolBPMN {
 	from
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			not PartitionUML.subpartition.isEmpty()
+			not PartitionUML.isLane()
 			)
 	to
 		PoolBPMN: MetaModeloBPMN!Pool (
-			name <- PartitionUML.name
+			name <- PartitionUML.name,
+			lanes <- PartitionUML.subpartition
+			
+			)
+}
+
+
+-- rule que transforma ActivityPartition em Lane
+rule PartitionUML2LaneBPMN {
+	from
+		PartitionUML: MetaModeloUML!ActivityPartition (
+			PartitionUML.isLane()
+			)
+	to
+		LaneBPMN: MetaModeloBPMN!Lane (
+			name <- PartitionUML.name,
+			pool <- PartitionUML.superPartition
+			
 			
 			)
 }
