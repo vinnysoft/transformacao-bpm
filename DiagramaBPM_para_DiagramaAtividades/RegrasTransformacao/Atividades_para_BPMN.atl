@@ -1,0 +1,77 @@
+-- @nsURI MetaModeloUML=http://www.eclipse.org/uml2/3.0.0/UML
+-- @nsURI MetaModeloBPMN=http://stp.eclipse.org/bpmn
+
+module Atividades_para_BPMN;
+create ModeloSaida:MetaModeloBPMN  from ModeloEntrada: MetaModeloUML;
+
+
+
+--Rules
+
+--Rule para criar uma atividade e modelo UML por cada diagrama BPMN.
+rule ModeloUML2DiagramaBPMN {
+	from
+		AtividadeUML: MetaModeloUML!Activity
+		
+	to
+		ModeloBPMN: MetaModeloBPMN!BpmnDiagram (
+			name <- 'Diagrama BPMN (gerado)',
+			artifacts <- MetaModeloBPMN!Artifact.allInstances(),
+			pools <- MetaModeloBPMN!Pool.allInstances(),
+			messages <- MetaModeloBPMN!MessagingEdge.allInstances()
+			
+			--package <- ModeloUML,
+	--		node <- MetaModeloUML!ActivityNode.allInstances(),
+		--	partition <- MetaModeloUML!ActivityPartition.allInstances(),
+			--edge <- MetaModeloUML!ActivityEdge.allInstances()
+		)
+}
+
+rule PartitionUML2PoolBPMN {
+	from
+		PartitionUML: MetaModeloUML!ActivityPartition (
+			not PartitionUML.subpartition.isEmpty()
+			)
+	to
+		PoolBPMN: MetaModeloBPMN!Pool (
+			name <- PartitionUML.name
+			
+			)
+}
+
+-- rules para eventos de inicio
+rule InicioUML2InicioBPMN {
+	from 
+		InitialNodeUML: MetaModeloUML!InitialNode (
+			InitialNodeUML.nameExpression.name = 'EventStartEmpty'
+			)
+	to
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventStartEmpty'
+			)
+}
+
+-- rules para eventos de start timer
+rule InicioUML2EventStartTimerBPMN {
+	from 
+		InitialNodeUML: MetaModeloUML!InitialNode (
+			InitialNodeUML.nameExpression.name = 'EventStartTimer'
+			)
+	to
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventStartTimer'
+			)
+}
+
+
+-- rules para eventos de start message
+rule InicioUML2EventStartMessageBPMN {
+	from 
+		AcceptEventUML: MetaModeloUML!AcceptEventAction
+	to
+		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventStartMessage'
+			)
+}
+
+
