@@ -68,9 +68,6 @@ rule PartitionUML2LaneBPMN {
 			name <- PartitionUML.name,
 			pool <- PartitionUML.superPartition
 			
---			activities <- PartitionUML.containedNode
-			
-			
 			)
 }
 
@@ -85,6 +82,7 @@ rule OpaqueActionUML2TaskBPMN {
 		ActivityBPMN: MetaModeloBPMN!Activity (
 			name <- OpaqueActionUML.name,
 			activityType <- 'Task'
+			
 		)
 }
 

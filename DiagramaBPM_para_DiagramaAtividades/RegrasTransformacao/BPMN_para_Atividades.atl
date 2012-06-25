@@ -530,11 +530,11 @@ rule TextBPMN2CommentUML {
 }
 
 -- Rule para transformação de Group  em Partition
-rule GroupBPMN2ActivityGroupUML {
+rule GroupBPMN2InterruptibleActivityRegionUML {
 	from
 		GrupoBPMN: MetaModeloBPMN!Group
 	to
-		GrupoUML: MetaModeloUML!InterruptibleActivityRegion (
+		ActivityRegionUML: MetaModeloUML!InterruptibleActivityRegion (
 
 		)
 }
@@ -576,20 +576,17 @@ rule PoolBPMN2PartitionUML {
 		PartitionUML: MetaModeloUML!ActivityPartition (
 			name <- PoolBPMN.name,
 			subpartition <- PoolBPMN.lanes
-			
-			 
-			
 		)
 }
 
 --Rule para mapear as LanesBPMN em ActivityPartitions
 rule LaneBPM2PartitionUML {
 	from
-		LaneBPM: MetaModeloBPMN!Lane
+		LaneBPMN: MetaModeloBPMN!Lane
 	to
 		PartitionUML: MetaModeloUML!ActivityPartition (
-			name <- LaneBPM.name,
-			superPartition <- LaneBPM.pool
+			name <- LaneBPMN.name,
+			superPartition <- LaneBPMN.pool
 		)
 }
 
