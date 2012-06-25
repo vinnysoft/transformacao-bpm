@@ -25,6 +25,17 @@ helper context MetaModeloUML!OpaqueAction def: isTask(): Boolean =
 		false
 	endif;
 
+
+--Helper para verificar se ControlFlow é Sequence Edge
+helper context MetaModeloUML!ControlFlow def: isSequenceEdge(): Boolean =
+	if 
+		self.nameExpression = 'SequenceEdge'
+	then
+		true
+	else
+		false
+	endif;
+
 --Rules
 
 --Rule para criar uma atividade e modelo UML por cada diagrama BPMN.
@@ -38,6 +49,7 @@ rule ModeloUML2DiagramaBPMN {
 			artifacts <- MetaModeloBPMN!Artifact.allInstances(),
 			pools <- MetaModeloBPMN!Pool.allInstances(),
 			messages <- MetaModeloBPMN!MessagingEdge.allInstances()
+			
 		)
 }
 
@@ -52,6 +64,7 @@ rule PartitionUML2PoolBPMN {
 			name <- PartitionUML.name,
 			lanes <- PartitionUML.subpartition,
 			sequenceEdges <- MetaModeloBPMN!SequenceEdge.allInstances()
+		
 			
 			)
 }
@@ -67,7 +80,6 @@ rule PartitionUML2LaneBPMN {
 		LaneBPMN: MetaModeloBPMN!Lane (
 			name <- PartitionUML.name,
 			pool <- PartitionUML.superPartition
-			
 			)
 }
 
@@ -100,16 +112,74 @@ rule LoopUML2LoopBPMN {
 }
 
 
+-- Subprocesso
+rule ExpansionRegionUML2SubProcessBPMN {
+	from
+		ExpansionRegionUML: MetaModeloUML!ExpansionRegion
+	to
+		SubProcessBPMN: MetaModeloBPMN!Activity (
+			name <- ExpansionRegionUML.name,
+			activityType <- 'SubProcess'
+			)
+}
+
 -- Edges
 -- Control Flow 2 SequenceEdge
 rule ControlFlowUML2SequenceEdgeBPMN {
 	from
-		ControlFlowUML: MetaModeloUML!ControlFlow
+		ControlFlowUML: MetaModeloUML!ControlFlow (
+			ControlFlowUML.isSequenceEdge()	
+		)
 	to
 		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge 
 }
 
+-- Object Flow 2 Association
+rule ObjectFlowUML2AssociationBPMN {
+	from
+		ObjectFlowUML: MetaModeloUML!ObjectFlow
+	to
+		AssociationBPMN: MetaModeloBPMN!Association (
+			
+			)
+}
 
+-- Rule para transformar Control Flow em Messaging Edge
+rule ControlFlowUML2MessagingEdgeBPMN {
+	from
+		ControlFlowUML: MetaModeloUML!ControlFlow (
+			not ControlFlowUML.isSequenceEdge()
+			)
+	to
+		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge
+}
+
+
+
+--
+--Rule para transformar Comment em Text Annotation
+rule CommentUML2TextAnnotationBPMN {
+	from
+		Comment: MetaModeloUML!Comment
+	to
+		TextBPMN: MetaModeloBPMN!TextAnnotation (
+			documentation <- Comment.body	
+		)
+}
+
+
+-- Rule de Data Store para Data Object
+rule DataStoreUML2DataObjectBPMN {
+	from
+		DataStoreUML: MetaModeloUML!DataStoreNode
+	to
+		DataObjectBPMN: MetaModeloBPMN!DataObject (
+			name <- DataStoreUML.name,
+			associations <- DataStoreUML.incoming
+		)
+}
+
+-- Eventos
 -- rules para eventos de inicio
 rule InicioUML2InicioBPMN {
 	from 

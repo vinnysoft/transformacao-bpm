@@ -497,12 +497,11 @@ rule SubProcessBPMN2ExpansionRegionUML {
 		)
 }
 
--- Rule Data Object para Artefato
+-- Rule Data Object para Data Store
 rule DataObjectBPMN2DataStoreUML {
 	from
 		DataObjectBPMN: MetaModeloBPMN!DataObject
 	to
-		--ObjetoUML: MetaModeloUML!ObjectNode (
 		DataStoreUML: MetaModeloUML!DataStoreNode (
 			name <- DataObjectBPMN.name,
 			incoming <- DataObjectBPMN.associations
