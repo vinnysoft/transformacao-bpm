@@ -15,10 +15,21 @@ helper context MetaModeloUML!ActivityPartition def: isLane(): Boolean =
 		false
 	endif;
 
---Helper para verificar se a Activity Partition é lane
+--Helper para verificar se OpaqueAction é tarefa
 helper context MetaModeloUML!OpaqueAction def: isTask(): Boolean =
 	if 
 		self.nameExpression = OclUndefined
+	then
+		true
+	else
+		false
+	endif;
+
+
+--Helper para verificar se OpaqueAction é InclusiveGateway
+helper context MetaModeloUML!OpaqueAction def: isInclusiveGateway(): Boolean =
+	if 
+		self.nameExpression = '<Inclusive Gateway>'
 	then
 		true
 	else
@@ -65,7 +76,7 @@ rule PartitionUML2PoolBPMN {
 			sequenceEdges <- MetaModeloBPMN!SequenceEdge.allInstances(),
 			vertices <- PartitionUML.containedNode,
 			sequenceEdges <- PartitionUML.edge
-			
+
 			)
 }
 
@@ -94,7 +105,9 @@ rule OpaqueActionUML2TaskBPMN {
 	to
 		ActivityBPMN: MetaModeloBPMN!Activity (
 			name <- OpaqueActionUML.name,
-			activityType <- 'Task'
+			activityType <- 'Task',
+			incomingEdges <- OpaqueActionUML.incoming,
+			outgoingEdges <- OpaqueActionUML.outgoing
 			
 		)
 }
@@ -108,7 +121,9 @@ rule LoopUML2LoopBPMN {
 		LoopBPMN: MetaModeloBPMN!Activity (
 			name <- LoopUML.name,
 			activityType <- 'Task',
-			looping <- true
+			looping <- true,
+			incomingEdges <- LoopUML.incoming,
+			outgoingEdges <- LoopUML.outgoing
 		)
 }
 
@@ -133,7 +148,8 @@ rule ControlFlowUML2SequenceEdgeBPMN {
 		)
 	to
 		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge (
-			name <- ControlFlowUML.name	
+			name <- ControlFlowUML.name
+			-- iD <- ControlFlowUML.name
 		)
 }
 
@@ -237,9 +253,91 @@ rule FinalNodeUML2EventEndEmptyBPMN {
 	to
 		AtividadeFimBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventEndEmpty',
-			name <- FinalNodeUML.name
-	--		incomingEdges <- InitialNodeUML.incoming,
---			outgoingEdges <- InitialNodeUML.outgoing
+			name <- FinalNodeUML.name,
+			incomingEdges <- FinalNodeUML.incoming
 			
 			)
+}
+
+-- gateways
+-- rules para gateways exclusivos
+rule DecisionNodeUML2ExclusiveGatewayBPMN {
+	from
+		DecisionUML: MetaModeloUML!DecisionNode
+	to
+		GateExclusivo: MetaModeloBPMN!Activity (
+			activityType <- 'GatewayDataBasedExclusive',
+			name <- if
+					DecisionUML.name.toString().size() > 0
+					then 
+					DecisionUML.name
+					else
+					DecisionUML.qualifiedName
+					endif,
+			incomingEdges <- DecisionUML.incoming,
+			outgoingEdges <- DecisionUML.outgoing
+		)
+}
+
+
+
+-- rule para gateway exclusivo
+rule MergeNodeUML2ExclusiveGatewayBPMN {
+	from
+		MergeUML: MetaModeloUML!MergeNode
+	to
+		GateExclusivo: MetaModeloBPMN!Activity (
+			activityType <- 'GatewayDataBasedExclusive',
+			name <- if
+					MergeUML.name.toString().size() > 0
+					then 
+					MergeUML.name
+					else
+					MergeUML.qualifiedName
+					endif,
+			incomingEdges <- MergeUML.incoming,
+			outgoingEdges <- MergeUML.outgoing
+		)
+}
+
+
+-- Todo: rule para gateway inclusivo de entrada
+
+
+-- rule para gateway inclusivo
+rule JoinNodeUML2InclusiveGatewayBPMN {
+	from
+		JoinUML: MetaModeloUML!JoinNode
+	to
+		GateInclusive: MetaModeloBPMN!Activity (
+			activityType <- 'GatewayDataBasedInclusive',
+			name <- if
+					JoinUML.name.toString().size() > 0
+					then 
+					JoinUML.name
+					else
+					JoinUML.qualifiedName
+					endif,
+			incomingEdges <- JoinUML.incoming,
+			outgoingEdges <- JoinUML.outgoing
+		)
+}
+
+-- rule para gateway paralelo
+rule ForkNodeUML2ParallelGatewayBPMN {
+	from
+		ForkUML: MetaModeloUML!ForkNode
+	to
+		GateInclusive: MetaModeloBPMN!Activity (
+			activityType <- 'GatewayParallel',
+			name <- if
+					ForkUML.name.toString().size() > 0
+					then 
+					ForkUML.name
+					else
+					ForkUML.qualifiedName
+					endif,
+			incomingEdges <- ForkUML.incoming,
+			outgoingEdges <- ForkUML.outgoing
+		)
 }
