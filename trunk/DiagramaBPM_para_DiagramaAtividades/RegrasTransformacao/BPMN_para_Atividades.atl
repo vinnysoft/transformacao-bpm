@@ -296,12 +296,16 @@ rule FimBPMN2FimUML {
 			AtividadeFimBPMN.isFinalNode()
 		)
 	to
+		StringExpressionUML: MetaModeloUML!StringExpression (
+			name <- 'EventEndEmpty'	
+		),	
 		AtividadeFimUML: MetaModeloUML!FlowFinalNode (
 			name <- AtividadeFimBPMN.name,
 			inPartition <- AtividadeFimBPMN.lanes.union(AtividadeFimBPMN.lanes ->
 					collect(lane | lane.pool)).union(AtividadeFimBPMN.groups),
 			incoming <- AtividadeFimBPMN.incomingEdges,
-			outgoing <- AtividadeFimBPMN.outgoingEdges
+			outgoing <- AtividadeFimBPMN.outgoingEdges,
+			nameExpression <- StringExpressionUML
 		)
 }
 
@@ -544,7 +548,7 @@ rule SequenceEdgeBPMN2ControlFlowUML {
 		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge
 	to
 		ActivityEdgeUML: MetaModeloUML!ControlFlow (
-			name <- if SequenceEdgeBPMN.source.name.toString().size() = 0 or
+			name <- 'SequenceEdge: ' + if SequenceEdgeBPMN.source.name.toString().size() = 0 or
 					SequenceEdgeBPMN.source.name = OclUndefined then
 					'ID: ' + SequenceEdgeBPMN.source.iD + '->' + 
 						if SequenceEdgeBPMN.target.
