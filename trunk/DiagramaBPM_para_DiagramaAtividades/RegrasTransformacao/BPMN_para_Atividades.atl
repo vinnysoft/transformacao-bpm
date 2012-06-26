@@ -428,6 +428,9 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 					InclusiveGatewayBPMN.isMultipleIncoming()
 		)
 	to
+		StringExpressionUML: MetaModeloUML!StringExpression (			
+			name <- '<Inclusive Gateway>'
+			),
 		JoinNodeUML: MetaModeloUML!JoinNode (
 			name <- if InclusiveGatewayBPMN.name <> OclUndefined then
 					InclusiveGatewayBPMN.name.toString()
@@ -439,7 +442,8 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 					
 			inInterruptibleRegion <- InclusiveGatewayBPMN.groups,
 			incoming <- InclusiveGatewayBPMN.incomingEdges,
-			outgoing <- InclusiveGatewayBPMN.outgoingEdges
+			outgoing <- InclusiveGatewayBPMN.outgoingEdges,
+			nameExpression <- StringExpressionUML  
 		)
 }
 
