@@ -29,7 +29,7 @@ helper context MetaModeloUML!OpaqueAction def: isTask(): Boolean =
 --Helper para verificar se ControlFlow é Sequence Edge
 helper context MetaModeloUML!ControlFlow def: isSequenceEdge(): Boolean =
 	if 
-		self.nameExpression = 'SequenceEdge'
+		self.name.startsWith('SequenceEdge:')
 	then
 		true
 	else
@@ -47,9 +47,8 @@ rule ModeloUML2DiagramaBPMN {
 		ModeloBPMN: MetaModeloBPMN!BpmnDiagram (
 			name <- 'Diagrama BPMN (gerado)',
 			artifacts <- MetaModeloBPMN!Artifact.allInstances(),
-			pools <- MetaModeloBPMN!Pool.allInstances(),
-			messages <- MetaModeloBPMN!MessagingEdge.allInstances()
-			
+			pools <- MetaModeloBPMN!Pool.allInstances()
+			--messages <- MetaModeloBPMN!MessagingEdge.allInstances()
 		)
 }
 
@@ -63,8 +62,9 @@ rule PartitionUML2PoolBPMN {
 		PoolBPMN: MetaModeloBPMN!Pool (
 			name <- PartitionUML.name,
 			lanes <- PartitionUML.subpartition,
-			sequenceEdges <- MetaModeloBPMN!SequenceEdge.allInstances()
-		
+			sequenceEdges <- MetaModeloBPMN!SequenceEdge.allInstances(),
+			vertices <- PartitionUML.containedNode,
+			sequenceEdges <- PartitionUML.edge
 			
 			)
 }
@@ -79,7 +79,8 @@ rule PartitionUML2LaneBPMN {
 	to
 		LaneBPMN: MetaModeloBPMN!Lane (
 			name <- PartitionUML.name,
-			pool <- PartitionUML.superPartition
+			pool <- PartitionUML.superPartition,
+			activities <- PartitionUML.containedNode
 			)
 }
 
@@ -131,7 +132,9 @@ rule ControlFlowUML2SequenceEdgeBPMN {
 			ControlFlowUML.isSequenceEdge()	
 		)
 	to
-		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge 
+		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge (
+			name <- ControlFlowUML.name	
+		)
 }
 
 -- Object Flow 2 Association
@@ -151,7 +154,9 @@ rule ControlFlowUML2MessagingEdgeBPMN {
 			not ControlFlowUML.isSequenceEdge()
 			)
 	to
-		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge
+		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge (
+			name <- ControlFlowUML.name	
+		)
 }
 
 
@@ -188,7 +193,8 @@ rule InicioUML2InicioBPMN {
 			)
 	to
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
-			activityType <- 'EventStartEmpty'
+			activityType <- 'EventStartEmpty',
+			name <- InitialNodeUML.name
 	--		incomingEdges <- InitialNodeUML.incoming,
 --			outgoingEdges <- InitialNodeUML.outgoing
 			
@@ -203,7 +209,8 @@ rule InicioUML2EventStartTimerBPMN {
 			)
 	to
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
-			activityType <- 'EventStartTimer'
+			activityType <- 'EventStartTimer',
+			name <- InitialNodeUML.name
 			)
 }
 
@@ -214,8 +221,25 @@ rule InicioUML2EventStartMessageBPMN {
 		AcceptEventUML: MetaModeloUML!AcceptEventAction
 	to
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
-			activityType <- 'EventStartMessage'
+			activityType <- 'EventStartMessage',
+			name <- AcceptEventUML.name
 			)
 }
 
 
+-- Eventos finais
+-- rules para eventos de fim
+rule FinalNodeUML2EventEndEmptyBPMN {
+	from 
+		FinalNodeUML: MetaModeloUML!FlowFinalNode (
+			FinalNodeUML.nameExpression.name = 'EventEndEmpty'
+			)
+	to
+		AtividadeFimBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventEndEmpty',
+			name <- FinalNodeUML.name
+	--		incomingEdges <- InitialNodeUML.incoming,
+--			outgoingEdges <- InitialNodeUML.outgoing
+			
+			)
+}
