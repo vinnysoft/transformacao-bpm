@@ -154,7 +154,7 @@ rule InicioBPMN2InicioUML {
 }
 
 -- rule para event start timer 
-rule EventStartTimerBPMN2AcceptEventActionUML {
+rule EventStartTimerBPMN2InitialNodeUML {
 	from
 		AtividadeInicioBPMN: MetaModeloBPMN!Activity (
 			AtividadeInicioBPMN.isInitialTimerNode()
@@ -199,7 +199,7 @@ rule EventStartMessageBPMN2AcceptEventUML {
 
 -- eventos intermediarios
 -- rule para event intermediate message 
-rule EventIntermediateMessageBPMN2MensagemUML {
+rule EventIntermediateMessageBPMN2OpaqueActionUML {
 	from
 		IntermediateMessageBPMN: MetaModeloBPMN!Activity (
 			IntermediateMessageBPMN.isEventIntermediateMessage()
@@ -208,7 +208,7 @@ rule EventIntermediateMessageBPMN2MensagemUML {
 		StringExpressionUML: MetaModeloUML!StringExpression (
 			name <- 'EventIntermediateMessage'	
 		),
-		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
 			name <- 'Evento intermediário mensageiro: ' + IntermediateMessageBPMN.name,
 			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
@@ -221,7 +221,7 @@ rule EventIntermediateMessageBPMN2MensagemUML {
 
 
 -- rule para event intermediate message 
-rule EventIntermediateBPMN2MensagemUML {
+rule EventIntermediateBPMN2OpaqueActionUML {
 	from
 		IntermediateBPMN: MetaModeloBPMN!Activity (
 			IntermediateBPMN.isEventIntermediate()
@@ -230,7 +230,7 @@ rule EventIntermediateBPMN2MensagemUML {
 		StringExpressionUML: MetaModeloUML!StringExpression (
 			name <- 'EventIntermediate'	
 		),
-		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
 			name <- 'Evento intermediário: ' + IntermediateBPMN.name,
 			inPartition <- IntermediateBPMN.lanes.union(IntermediateBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateBPMN.groups),
@@ -392,7 +392,7 @@ rule ExclusiveGatewayBPMN2MergeNodeUML {
 
 
 -- Gateway inclusive
-rule InclusiveGatewayBPMN2ForkNodeUML {
+rule InclusiveGatewayBPMN2OpaqueActionUML {
 	from
 		InclusiveGatewayBPMN: MetaModeloBPMN!Activity (
 			InclusiveGatewayBPMN.activityType = #GatewayDataBasedInclusive and

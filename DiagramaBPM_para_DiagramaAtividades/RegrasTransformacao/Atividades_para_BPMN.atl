@@ -133,9 +133,9 @@ rule OpaqueActionUML2TaskBPMN {
 	to
 		ActivityBPMN: MetaModeloBPMN!Activity (
 			name <- OpaqueActionUML.name,
-			activityType <- 'Task',
+			activityType <- 'Task'
 			--incomingEdges <- OpaqueActionUML.incoming,
-			outgoingEdges <- OpaqueActionUML.outgoing
+			--outgoingEdges <- OpaqueActionUML.outgoing
 			
 		)
 }
@@ -217,6 +217,16 @@ rule CommentUML2TextAnnotationBPMN {
 }
 
 
+-- Rule para transformação de InterruptibleActivityRegionUML em Group
+rule InterruptibleActivityRegionUML2GroupBPMN {
+	from
+		ActivityRegionUML: MetaModeloUML!InterruptibleActivityRegion
+	to
+		GrupoBPMN: MetaModeloBPMN!Group
+}
+	
+
+
 -- Rule de Data Store para Data Object
 rule DataStoreUML2DataObjectBPMN {
 	from
@@ -289,7 +299,7 @@ rule OpaqueActionUML2EventIntermediateMessageBPMN {
 rule OpaqueActionUML2EventIntermediateBPMN {
 	from
 		OpaqueActionUML: MetaModeloUML!OpaqueAction (
-			OpaqueActionUML.isEventIntermediateMessage()
+			OpaqueActionUML.isEventIntermediate()
 		)
 	to
 		EventIntermediateMessageBPMN: MetaModeloBPMN!Activity (
