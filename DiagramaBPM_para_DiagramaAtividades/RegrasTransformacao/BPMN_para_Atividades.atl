@@ -205,16 +205,16 @@ rule EventIntermediateMessageBPMN2MensagemUML {
 			IntermediateMessageBPMN.isEventIntermediateMessage()
 		)
 	to
-		ComentarioUML: MetaModeloUML!Comment (
-			body <- IntermediateMessageBPMN.documentation
-			),
+		StringExpressionUML: MetaModeloUML!StringExpression (
+			name <- 'EventIntermediateMessage'	
+		),
 		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
 			name <- 'Evento intermediário mensageiro: ' + IntermediateMessageBPMN.name,
 			inPartition <- IntermediateMessageBPMN.lanes.union(IntermediateMessageBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateMessageBPMN.groups),
 			incoming <- IntermediateMessageBPMN.incomingEdges,
 			outgoing <- IntermediateMessageBPMN.outgoingEdges,
-			ownedComment <- ComentarioUML
+			nameExpression <- StringExpressionUML
 		)		
 				
 }
@@ -227,16 +227,16 @@ rule EventIntermediateBPMN2MensagemUML {
 			IntermediateBPMN.isEventIntermediate()
 		)
 	to
-		ComentarioUML: MetaModeloUML!Comment (
-			body <- IntermediateBPMN.documentation
-			),
+		StringExpressionUML: MetaModeloUML!StringExpression (
+			name <- 'EventIntermediate'	
+		),
 		AcceptEventActionUML: MetaModeloUML!OpaqueAction (
 			name <- 'Evento intermediário: ' + IntermediateBPMN.name,
 			inPartition <- IntermediateBPMN.lanes.union(IntermediateBPMN.lanes ->
 					collect(lane | lane.pool)).union(IntermediateBPMN.groups),
 			incoming <- IntermediateBPMN.incomingEdges,
 			outgoing <- IntermediateBPMN.outgoingEdges,
-			ownedComment <- ComentarioUML
+			nameExpression <- StringExpressionUML
 		)		
 				
 }
@@ -251,7 +251,7 @@ rule TerminateBPMN2FimUML {
 		)
 	to
 		StringExpressionUML: MetaModeloUML!StringExpression (
-			name <- 'EventEndEmpty'	
+			name <- 'EventEndTerminate'	
 		),
 		AtividadeFimUML: MetaModeloUML!ActivityFinalNode (
 			name <- TerminateBPMN.name,
@@ -400,7 +400,7 @@ rule InclusiveGatewayBPMN2ForkNodeUML {
 		)
 	to
 		StringExpressionUML: MetaModeloUML!StringExpression (			
-			name <- '<Inclusive Gateway>'
+			name <- 'GatewayDataBasedInclusive'
 			),
 		InclusiveUML: MetaModeloUML!OpaqueAction (
 			name <- if
@@ -429,7 +429,7 @@ rule InclusiveGatewayBPMN2JoinNodeUML {
 		)
 	to
 		StringExpressionUML: MetaModeloUML!StringExpression (			
-			name <- '<Inclusive Gateway>'
+			name <- 'GatewayDataBasedInclusive'
 			),
 		JoinNodeUML: MetaModeloUML!JoinNode (
 			name <- if InclusiveGatewayBPMN.name <> OclUndefined then

@@ -29,13 +29,41 @@ helper context MetaModeloUML!OpaqueAction def: isTask(): Boolean =
 --Helper para verificar se OpaqueAction é InclusiveGateway
 helper context MetaModeloUML!OpaqueAction def: isInclusiveGateway(): Boolean =
 	if 
-		self.nameExpression = '<Inclusive Gateway>'
+		self.nameExpression = 'GatewayDataBasedInclusive'
 	then
 		true
 	else
 		false
 	endif;
 
+
+--Helper para verificar se OpaqueAction é InclusiveGateway
+helper context MetaModeloUML!JoinNode def: isInclusiveGateway(): Boolean =
+	if
+		self.nameExpression = 'GatewayDataBasedInclusive'
+	then
+		true
+	else
+		false
+	endif;
+
+
+--Helper para verificar se a atividade é Event Intermediate Message
+helper context MetaModeloUML!OpaqueAction def: isEventIntermediateMessage(): Boolean =
+	if 	self.nameExpression = 'EventIntermediateMessage' then
+		true
+	else
+		false
+	endif;
+
+
+--Helper para verificar se a atividade é Event Intermediate 
+helper context MetaModeloUML!OpaqueAction def: isEventIntermediate(): Boolean =
+	if 	self.nameExpression <> 'EventIntermediateMessage' and self.nameExpression.toString().startsWith('EventIntermediate') then
+		true
+	else
+		false
+	endif;
 
 --Helper para verificar se ControlFlow é Sequence Edge
 helper context MetaModeloUML!ControlFlow def: isSequenceEdge(): Boolean =
@@ -106,7 +134,7 @@ rule OpaqueActionUML2TaskBPMN {
 		ActivityBPMN: MetaModeloBPMN!Activity (
 			name <- OpaqueActionUML.name,
 			activityType <- 'Task',
-			incomingEdges <- OpaqueActionUML.incoming,
+			--incomingEdges <- OpaqueActionUML.incoming,
 			outgoingEdges <- OpaqueActionUML.outgoing
 			
 		)
@@ -242,6 +270,35 @@ rule InicioUML2EventStartMessageBPMN {
 			)
 }
 
+--Eventos intermediários
+rule OpaqueActionUML2EventIntermediateMessageBPMN {
+	from
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
+			OpaqueActionUML.isEventIntermediateMessage()
+		)
+	to
+		EventIntermediateMessageBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventIntermediateMessage',
+			name <- OpaqueActionUML.name,
+			incomingEdges <- OpaqueActionUML.incoming,
+			outgoingEdges <- OpaqueActionUML.outgoing
+		)
+}
+
+--Eventos intermediários
+rule OpaqueActionUML2EventIntermediateBPMN {
+	from
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
+			OpaqueActionUML.isEventIntermediateMessage()
+		)
+	to
+		EventIntermediateMessageBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventIntermediateEmpty',
+			name <- OpaqueActionUML.name,
+			incomingEdges <- OpaqueActionUML.incoming,
+			outgoingEdges <- OpaqueActionUML.outgoing
+		)
+}
 
 -- Eventos finais
 -- rules para eventos de fim
@@ -255,6 +312,38 @@ rule FinalNodeUML2EventEndEmptyBPMN {
 			activityType <- 'EventEndEmpty',
 			name <- FinalNodeUML.name,
 			incomingEdges <- FinalNodeUML.incoming
+			
+			)
+}
+
+
+-- rules para eventos de fim com mensagem
+rule FinalNodeUML2EventEndMessageBPMN {
+	from 
+		FinalNodeUML: MetaModeloUML!ActivityFinalNode (
+			FinalNodeUML.nameExpression.name = 'EventEndMessage'
+			)
+	to
+		AtividadeFimBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventEndMessage',
+			name <- FinalNodeUML.name,
+			incomingEdges <- FinalNodeUML.incoming
+			
+			)
+}
+
+
+-- rules para eventos de fim
+rule FinalNodeUML2EventEndTerminateBPMN {
+	from 
+		ActivityFinalNodeUML: MetaModeloUML!ActivityFinalNode (
+			ActivityFinalNodeUML.nameExpression.name = 'EventEndTerminate'
+			)
+	to
+		AtividadeFimBPMN: MetaModeloBPMN!Activity (
+			activityType <- 'EventEndTerminate',
+			name <- ActivityFinalNodeUML.name,
+			incomingEdges <- ActivityFinalNodeUML.incoming
 			
 			)
 }
@@ -302,12 +391,32 @@ rule MergeNodeUML2ExclusiveGatewayBPMN {
 
 
 -- Todo: rule para gateway inclusivo de entrada
-
+rule OpaqueAction2InclusiveGatewayBPMN {
+	from
+		OpaqueActionUML: MetaModeloUML!OpaqueAction (
+			OpaqueActionUML.isInclusiveGateway()
+			)
+	to
+		InclusiveBPMN: MetaModeloBPMN!Activity (
+			name <- if
+					OpaqueActionUML.name.toString().size() > 0
+					then 
+					OpaqueActionUML.name
+					else
+					OpaqueActionUML.qualifiedName
+					endif,
+			activityType <- 'GatewayDataBasedInclusive',
+			incomingEdges <- OpaqueActionUML.incoming,
+			outgoingEdges <- OpaqueActionUML.outgoing
+		)
+}
 
 -- rule para gateway inclusivo
 rule JoinNodeUML2InclusiveGatewayBPMN {
 	from
-		JoinUML: MetaModeloUML!JoinNode
+		JoinUML: MetaModeloUML!JoinNode (
+			JoinUML.isInclusiveGateway()	
+		)
 	to
 		GateInclusive: MetaModeloBPMN!Activity (
 			activityType <- 'GatewayDataBasedInclusive',
@@ -339,5 +448,27 @@ rule ForkNodeUML2ParallelGatewayBPMN {
 					endif,
 			incomingEdges <- ForkUML.incoming,
 			outgoingEdges <- ForkUML.outgoing
+		)
+}
+
+
+-- rule para gateway paralelo
+rule JoinNodeUML2ParallelGatewayBPMN {
+	from
+		JoinUML: MetaModeloUML!JoinNode (
+			not JoinUML.isInclusiveGateway()	
+		)
+	to
+		GateInclusive: MetaModeloBPMN!Activity (
+			activityType <- 'GatewayParallel',
+			name <- if
+					JoinUML.name.toString().size() > 0
+					then 
+					JoinUML.name
+					else
+					JoinUML.qualifiedName
+					endif,
+			incomingEdges <- JoinUML.incoming,
+			outgoingEdges <- JoinUML.outgoing
 		)
 }
