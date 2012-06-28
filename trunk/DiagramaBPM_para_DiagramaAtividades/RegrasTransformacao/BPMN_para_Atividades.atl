@@ -491,9 +491,9 @@ rule ParallelGatewayBPMN2JoinNodeUML {
 -- Subprocesso
 rule SubProcessBPMN2ExpansionRegionUML {
 	from
-		SubProcessBPMN: MetaModeloBPMN!Activity (
-			SubProcessBPMN.activityType = #SubProcess
-		)
+		SubProcessBPMN: MetaModeloBPMN!SubProcess --(
+			--SubProcessBPMN.activityType = #SubProcess
+		--)
 	to
 		ExpansionRegionUML: MetaModeloUML!ExpansionRegion (
 			name <- SubProcessBPMN.name,

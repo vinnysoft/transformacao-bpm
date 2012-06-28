@@ -161,9 +161,10 @@ rule ExpansionRegionUML2SubProcessBPMN {
 	from
 		ExpansionRegionUML: MetaModeloUML!ExpansionRegion
 	to
-		SubProcessBPMN: MetaModeloBPMN!Activity (
+		SubProcessBPMN: MetaModeloBPMN!SubProcess (
+			vertices <- ExpansionRegionUML.containedNode,
 			name <- ExpansionRegionUML.name,
-			activityType <- 'SubProcess'
+			vertices <- ExpansionRegionUML.containedNode
 			)
 }
 
@@ -179,7 +180,7 @@ rule ControlFlowUML2SequenceEdgeBPMN {
 			name <- ControlFlowUML.name,
 			source <- ControlFlowUML.source,
 			target <- ControlFlowUML.target
-			-- iD <- ControlFlowUML.name
+			
 		)
 }
 
