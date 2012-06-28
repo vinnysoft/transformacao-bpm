@@ -86,8 +86,8 @@ rule ModeloUML2DiagramaBPMN {
 		ModeloBPMN: MetaModeloBPMN!BpmnDiagram (
 			name <- 'Diagrama BPMN (gerado)',
 			artifacts <- MetaModeloBPMN!Artifact.allInstances(),
-			pools <- MetaModeloBPMN!Pool.allInstances()
-			--messages <- MetaModeloBPMN!MessagingEdge.allInstances()
+			pools <- MetaModeloBPMN!Pool.allInstances(),
+			messages <- MetaModeloBPMN!MessagingEdge.allInstances()
 		)
 }
 
@@ -134,8 +134,8 @@ rule OpaqueActionUML2TaskBPMN {
 		ActivityBPMN: MetaModeloBPMN!Activity (
 			name <- OpaqueActionUML.name,
 			activityType <- 'Task'
-			--incomingEdges <- OpaqueActionUML.incoming,
-			--outgoingEdges <- OpaqueActionUML.outgoing
+			--incomingEdges <- OpaqueActionUML.incoming
+			-- outgoingEdges <- OpaqueActionUML.outgoing
 			
 		)
 }
@@ -149,9 +149,9 @@ rule LoopUML2LoopBPMN {
 		LoopBPMN: MetaModeloBPMN!Activity (
 			name <- LoopUML.name,
 			activityType <- 'Task',
-			looping <- true,
-			incomingEdges <- LoopUML.incoming,
-			outgoingEdges <- LoopUML.outgoing
+			looping <- true
+			-- incomingEdges <- LoopUML.incoming,
+			-- outgoingEdges <- LoopUML.outgoing
 		)
 }
 
@@ -176,7 +176,9 @@ rule ControlFlowUML2SequenceEdgeBPMN {
 		)
 	to
 		SequenceEdgeBPMN: MetaModeloBPMN!SequenceEdge (
-			name <- ControlFlowUML.name
+			name <- ControlFlowUML.name,
+			source <- ControlFlowUML.source,
+			target <- ControlFlowUML.target
 			-- iD <- ControlFlowUML.name
 		)
 }
@@ -186,8 +188,7 @@ rule ObjectFlowUML2AssociationBPMN {
 	from
 		ObjectFlowUML: MetaModeloUML!ObjectFlow
 	to
-		AssociationBPMN: MetaModeloBPMN!Association (
-			
+		AssociationBPMN: MetaModeloBPMN!Association (		
 			)
 }
 
@@ -199,7 +200,9 @@ rule ControlFlowUML2MessagingEdgeBPMN {
 			)
 	to
 		MessagingEdgeBPMN: MetaModeloBPMN!MessagingEdge (
-			name <- ControlFlowUML.name	
+			name <- ControlFlowUML.name	,
+			source <- ControlFlowUML.source,
+			target <- ControlFlowUML.target
 		)
 }
 
@@ -289,9 +292,9 @@ rule OpaqueActionUML2EventIntermediateMessageBPMN {
 	to
 		EventIntermediateMessageBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventIntermediateMessage',
-			name <- OpaqueActionUML.name,
-			incomingEdges <- OpaqueActionUML.incoming,
-			outgoingEdges <- OpaqueActionUML.outgoing
+			name <- OpaqueActionUML.name
+			-- incomingEdges <- OpaqueActionUML.incoming,
+			-- outgoingEdges <- OpaqueActionUML.outgoing
 		)
 }
 
@@ -304,9 +307,9 @@ rule OpaqueActionUML2EventIntermediateBPMN {
 	to
 		EventIntermediateMessageBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventIntermediateEmpty',
-			name <- OpaqueActionUML.name,
-			incomingEdges <- OpaqueActionUML.incoming,
-			outgoingEdges <- OpaqueActionUML.outgoing
+			name <- OpaqueActionUML.name
+			-- incomingEdges <- OpaqueActionUML.incoming,
+			-- outgoingEdges <- OpaqueActionUML.outgoing
 		)
 }
 
@@ -336,8 +339,8 @@ rule FinalNodeUML2EventEndMessageBPMN {
 	to
 		AtividadeFimBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventEndMessage',
-			name <- FinalNodeUML.name,
-			incomingEdges <- FinalNodeUML.incoming
+			name <- FinalNodeUML.name
+			-- incomingEdges <- FinalNodeUML.incoming
 			
 			)
 }
@@ -352,8 +355,8 @@ rule FinalNodeUML2EventEndTerminateBPMN {
 	to
 		AtividadeFimBPMN: MetaModeloBPMN!Activity (
 			activityType <- 'EventEndTerminate',
-			name <- ActivityFinalNodeUML.name,
-			incomingEdges <- ActivityFinalNodeUML.incoming
+			name <- ActivityFinalNodeUML.name
+			-- incomingEdges <- ActivityFinalNodeUML.incoming
 			
 			)
 }
@@ -372,9 +375,9 @@ rule DecisionNodeUML2ExclusiveGatewayBPMN {
 					DecisionUML.name
 					else
 					DecisionUML.qualifiedName
-					endif,
-			incomingEdges <- DecisionUML.incoming,
-			outgoingEdges <- DecisionUML.outgoing
+					endif
+			-- incomingEdges <- DecisionUML.incoming,
+			-- outgoingEdges <- DecisionUML.outgoing
 		)
 }
 
@@ -393,9 +396,9 @@ rule MergeNodeUML2ExclusiveGatewayBPMN {
 					MergeUML.name
 					else
 					MergeUML.qualifiedName
-					endif,
-			incomingEdges <- MergeUML.incoming,
-			outgoingEdges <- MergeUML.outgoing
+					endif
+			-- incomingEdges <- MergeUML.incoming,
+			-- outgoingEdges <- MergeUML.outgoing
 		)
 }
 
@@ -415,9 +418,9 @@ rule OpaqueAction2InclusiveGatewayBPMN {
 					else
 					OpaqueActionUML.qualifiedName
 					endif,
-			activityType <- 'GatewayDataBasedInclusive',
-			incomingEdges <- OpaqueActionUML.incoming,
-			outgoingEdges <- OpaqueActionUML.outgoing
+			activityType <- 'GatewayDataBasedInclusive'
+			-- incomingEdges <- OpaqueActionUML.incoming,
+			-- outgoingEdges <- OpaqueActionUML.outgoing
 		)
 }
 
@@ -436,9 +439,9 @@ rule JoinNodeUML2InclusiveGatewayBPMN {
 					JoinUML.name
 					else
 					JoinUML.qualifiedName
-					endif,
-			incomingEdges <- JoinUML.incoming,
-			outgoingEdges <- JoinUML.outgoing
+					endif
+			-- incomingEdges <- JoinUML.incoming,
+			-- outgoingEdges <- JoinUML.outgoing
 		)
 }
 
@@ -455,9 +458,9 @@ rule ForkNodeUML2ParallelGatewayBPMN {
 					ForkUML.name
 					else
 					ForkUML.qualifiedName
-					endif,
-			incomingEdges <- ForkUML.incoming,
-			outgoingEdges <- ForkUML.outgoing
+					endif
+			-- incomingEdges <- ForkUML.incoming,
+			-- outgoingEdges <- ForkUML.outgoing
 		)
 }
 
@@ -477,8 +480,8 @@ rule JoinNodeUML2ParallelGatewayBPMN {
 					JoinUML.name
 					else
 					JoinUML.qualifiedName
-					endif,
-			incomingEdges <- JoinUML.incoming,
-			outgoingEdges <- JoinUML.outgoing
+					endif
+			-- incomingEdges <- JoinUML.incoming,
+			-- outgoingEdges <- JoinUML.outgoing
 		)
 }
