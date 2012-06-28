@@ -163,8 +163,7 @@ rule ExpansionRegionUML2SubProcessBPMN {
 	to
 		SubProcessBPMN: MetaModeloBPMN!SubProcess (
 			vertices <- ExpansionRegionUML.containedNode,
-			name <- ExpansionRegionUML.name,
-			vertices <- ExpansionRegionUML.containedNode
+			name <- ExpansionRegionUML.name
 			)
 }
 
