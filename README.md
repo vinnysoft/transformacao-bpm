@@ -37,7 +37,7 @@ Para configurar o Plugin STP:
 
 ###Importando o Projeto de Exemplo
 
-- Fazer o download do projeto de exemplo disponível na página http://code.google.com/p/transformacao-bpm/downloads/list.
+- Fazer o download do projeto de exemplo disponível na página https://github.com/vinnysoft/transformacao-bpm/releases/tag/1.0.
 - Descompactar o projeto.
 - Abrir o Eclipse e clicar no menu "File -> Import..."
 - Selecionar o item "General -> Existing Projects into Workspace"
